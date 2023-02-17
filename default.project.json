@@ -1,0 +1,12 @@
+{
+	"name": "Packages",
+	"tree": {
+		"$path": "src/Packages",
+		
+		"CubeCat": {
+			"$path": "src"
+		}
+		
+	}
+	
+}
