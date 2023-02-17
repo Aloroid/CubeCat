@@ -37,7 +37,7 @@ local function Theme(GuideColor: CanBeState<Enum.StudioStyleGuideColor>, GuideMo
 			guideModifier or Enum.StudioStyleGuideModifier.Default
 		)
 		
-	end)
+	end, Fusion.doNothing)
 	
 end
 

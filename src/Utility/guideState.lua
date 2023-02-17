@@ -33,7 +33,7 @@ local function guideState(selected: StateObject, disabled: StateObject, pressed:
 		
 		return value
 		
-	end)
+	end, Fusion.doNothing)
 	
 end
 

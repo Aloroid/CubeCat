@@ -39,7 +39,7 @@ local function mapGuideColor(current: CanBeState<StudioStyleGuideModifier>, over
 		local result = currentOverwrites[currentModifier] or currentOverwrites[Enum.StudioStyleGuideModifier.Default]
 		
 		return result
-	end)
+	end, Fusion.doNothing)
 	
 end
 
