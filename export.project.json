@@ -1,0 +1,22 @@
+{
+	"name": "CubeCat",
+	
+	"tree": {
+		"$className": "DataModel",
+		
+		"ServerScriptService": {
+			
+			"CubeCat": {
+				"$path": "src/Packages",
+				
+				"CubeCat": {
+					"$path": "src"
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+}
