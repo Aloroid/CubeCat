@@ -29,7 +29,7 @@ export type TopLayer = {
 }
 
 local COMPONENT_ONLY_PROPERTIES = {
-	
+	Children
 	
 }
 
@@ -61,7 +61,7 @@ local function TopLayer(props: TopLayer)
 		refLayerCollector:set(nil)
 		return nil
 	
-	end)
+	end, Fusion.doNothing)
 	
 	local observer = Observer(parent):onChange(function()
 		local currentParent = unwrap(parent)
@@ -108,7 +108,9 @@ local function TopLayer(props: TopLayer)
 			end),
 			Rotation = realRotation,
 			
-			BackgroundTransparency = 1
+			BackgroundTransparency = 1,
+			
+			[Children] = props[Children]
 			
 		},
 		

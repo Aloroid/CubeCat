@@ -26,7 +26,9 @@ export type Text = {
 }
 
 local COMPONENT_ONLY_PROPERTIES = {
-	"Text"
+	"Text",
+	"TextColor",
+	"TextModifier"
 }
 
 local function Text(props: Text)

@@ -35,7 +35,6 @@ export type Background = {
 	HorizontalAlignment: CanBeState<Enum.HorizontalAlignment>?,
 	VerticalAlignment: CanBeState<Enum.VerticalAlignment>?,
 	SortDirection: CanBeState<Enum.SortDirection>?,
-	FillDirection: CanBeState<Enum.FillDirection>?,
 	
 	NoList: CanBeState<boolean>?,
 	NoPadding: CanBeState<boolean>?,
@@ -51,7 +50,6 @@ local COMPONENT_ONLY_PROPERTIES = {
 	"HorizontalAlignment",
 	"VerticalAlignment",
 	"SortDirection",
-	"FillDirection",
 	"NoList",
 	"NoPadding"
 	
@@ -67,13 +65,19 @@ local function Background(props: Background)
 	
 	local BackgroundColor3 = Spring(Theme(BackgroundColor, BackgroundModifier), 40, 1)
 	
-	local Background = New "Frame" {
+	local Background = New "ScrollingFrame" {
 		
 		Name = "Background",
 		
 		Size = UDim2.fromScale(1, 1),
+		CanvasSize = UDim2.fromScale(0, 0),
+		AutomaticCanvasSize = Enum.AutomaticSize.Y,
 		
 		BackgroundColor3 = BackgroundColor3,
+		
+		ScrollBarImageColor3 = Theme(Enum.StudioStyleGuideColor.ScrollBar, Enum.StudioStyleGuideModifier.Hover),
+		ScrollBarThickness = 6,
+		VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar,
 		
 		[Children] = {
 			
@@ -98,8 +102,7 @@ local function Background(props: Background)
 						
 						SortDirection = props.SortDirection,
 						HorizontalAlignment = props.HorizontalAlignment,
-						VerticalAlignment = props.VerticalAlignment,
-						FillDirection = props.FillDirection
+						VerticalAlignment = props.VerticalAlignment
 						
 					}
 				end

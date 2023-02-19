@@ -41,6 +41,10 @@ export type Button = {
 	Pressed: CanBeState<boolean>?,
 	Hovering: CanBeState<boolean>?,
 	
+	FillDirection: CanBeState<Enum.FillDirection>?,
+	VerticalAlignment: CanBeState<Enum.VerticalAlignment>?,
+	HorizontalAlignment: CanBeState<Enum.HorizontalAlignment>?,
+	
 	[any]: any
 }
 
@@ -56,6 +60,10 @@ local COMPONENT_ONLY_PROPERTIES = {
 	"Selected",
 	"Pressed",
 	"Hovering",
+	"FillDirection",
+	"VerticalAlignment",
+	"HorizontalAlignment",
+	"NoText",
 	Children
 }
 local CORNER_RADIUS = 3
@@ -70,7 +78,7 @@ local function Button(props: Button)
 	local GeneralModifier = guideState(Selected, Disabled, Pressed, Hovering)
 	
 	local BackgroundModifier = props.BackgroundModifier or GeneralModifier
-	local BackgroundColor = props.BackgroundColor or Spring(Theme(mapGuideModifier(
+	local BackgroundColor = Spring(Theme(props.BackgroundColor or mapGuideModifier(
 		BackgroundModifier,
 		{
 			[Enum.StudioStyleGuideModifier.Default] = Enum.StudioStyleGuideColor.Button,
@@ -78,17 +86,17 @@ local function Button(props: Button)
 		}
 	), BackgroundModifier), 120, 1)
 	local BorderModifier = props.BorderModifier or GeneralModifier
-	local BorderColor = props.BorderColor or Spring(Theme(mapGuideModifier(
+	local BorderColor = Spring(Theme(props.BorderColor or mapGuideModifier(
 		BorderModifier,
 		{
 		[Enum.StudioStyleGuideModifier.Default] = Enum.StudioStyleGuideColor.Border,
 		[Enum.StudioStyleGuideModifier.Selected] = Enum.StudioStyleGuideColor.MainButton,
 		[Enum.StudioStyleGuideModifier.Disabled] = Enum.StudioStyleGuideColor.Button
 		}
-	), BorderModifier), 120, 1)
+	), BorderModifier), 80, 1)
 	local TextModifier = props.TextModifier or GeneralModifier
-	local TextColor = props.TextColor or Spring(
-		Theme(Enum.StudioStyleGuideColor.ButtonText, TextModifier), 100, 1
+	local TextColor = Spring(
+		Theme(props.TextColor or Enum.StudioStyleGuideColor.ButtonText, TextModifier), 100, 1
 	)
 	
 	local Button = New "TextButton" {
@@ -127,13 +135,16 @@ local function Button(props: Button)
 				Text = props.Text,
 				TextSize = props.TextSize,
 				
+				Visible = Computed(function() return not unwrap(props.NoText) end),
+				
 				LayoutOrder = 100
 				
 			},
 			
 			New "UIListLayout" {
-				FillDirection = Enum.FillDirection.Horizontal,
-				VerticalAlignment = Enum.VerticalAlignment.Center,
+				FillDirection = props.FillDirection or Enum.FillDirection.Horizontal,
+				VerticalAlignment = props.VerticalAlignment or Enum.VerticalAlignment.Center,
+				HorizontalAlignment = props.HorizontalAlignment,
 				SortOrder = Enum.SortOrder.LayoutOrder,
 				
 				Padding = UDim.new(0, 6)
