@@ -45,6 +45,9 @@ export type Button = {
 	VerticalAlignment: CanBeState<Enum.VerticalAlignment>?,
 	HorizontalAlignment: CanBeState<Enum.HorizontalAlignment>?,
 	
+	NoText: CanBeState<boolean>?,
+	NoPadding: CanBeState<boolean>?,
+	
 	[any]: any
 }
 
@@ -118,11 +121,14 @@ local function Button(props: Button)
 		
 		[Children] = {
 			
-			Padding {
-				Padding = 8,
-				PaddingTop = UDim.new(0, 4),
-				PaddingBottom = UDim.new(0, 4)
-			},
+			Computed(function()
+				if unwrap(props.NoPadding) then return nil end
+				return Padding {
+					Padding = 8,
+					PaddingTop = UDim.new(0, 4),
+					PaddingBottom = UDim.new(0, 4)
+				}
+			end, Fusion.cleanup),
 			
 			Border {
 				Color = BorderColor
