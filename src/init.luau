@@ -2,6 +2,7 @@ local Util = script.Utility
 
 local CubeCat = {
 	CreateService = require(script.CreateService),
+	AddServices = require(script.AddServices),
 	
 	Export = require(script.Export),
 	Import = require(script.Import),
