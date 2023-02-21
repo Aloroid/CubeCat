@@ -17,6 +17,11 @@ local StateService = CubeCat.CreateService({
 local StartTime = 0
 
 function StateService:getState()
+	return StateService.Public:getState()
+	
+end
+
+function StateService.Public:getState()
 	local difference = os.clock() - StartTime
 	
 	return math.floor(difference)
