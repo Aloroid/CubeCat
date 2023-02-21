@@ -7,10 +7,6 @@ local Fusion = require(Packages.Fusion)
 local Value = Fusion.Value
 local Computed = Fusion.Computed
 
-local WEAK_KEYS_METATABLE = {__mode = "k"}
-
-local weakReferences = setmetatable({}, WEAK_KEYS_METATABLE)
-
 local function Runtime<T>(func: (old: T?) -> T): Fusion.Computed<T>
 	
 	local result, success = func(nil)
@@ -18,19 +14,19 @@ local function Runtime<T>(func: (old: T?) -> T): Fusion.Computed<T>
 	local wrapper = Computed(function()
 		return realValue:get()
 	end, Fusion.doNothing)
-	local connection
 	
-	connection = RunService.Heartbeat:Connect(function()
-		if weakReferences[wrapper] then
+	wrapper._connection = RunService.Heartbeat:Connect(function()
+		-- If there is nothing left in the dependentSet, we'll disconnnect the
+		-- connection because nobody depends on it anymore.
+		if next(wrapper.dependentSet) then
 			local result, success = func(realValue:get(false))
 			if success == false then return end
 			realValue:set(result)
 		else
-			connection:Disconnect()
+			wrapper._connection:Disconnect()
 		end
 	end)
 	
-	weakReferences[wrapper] = true
 	wrapper.kind = "Runtime"
 	
 	return wrapper

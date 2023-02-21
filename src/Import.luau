@@ -11,11 +11,11 @@ local function Import(to: string)
 	return 
 		Runtime(function(oldValue)
 			local export = sharedState.PublicExportInstances[to] or {}
-			return export.instance, oldValue == export.instance
+			return export.instance, oldValue ~= export.instance
 		end),
 		Runtime(function(oldValue)
 			local export = sharedState.PublicExportInstances[to] or {}
-			return export.values, oldValue == export.values
+			return export.values, oldValue ~= export.values
 		end)
 	
 end

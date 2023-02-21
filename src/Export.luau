@@ -14,19 +14,21 @@ local function Export(as: string)
 	exportAs.kind = "Export"
 	exportAs.stage = "observer"
 
-	function exportAs:apply(exports: {[any]: any}, applyTo: Instance, ExportTasks: {any})
+	function exportAs:apply(exports: {[any]: any}, applyTo: Instance, cleanupTasks: {any})
 		assert(sharedState.PublicExportInstances[as] == nil, `[CubeCat] Attempted to overwrite existing Export "{as}" with {applyTo.Name}` )
 		
 		sharedState.PublicExportInstances[as] = {
 			instance = applyTo,
 			values = exports
 		}
-		table.insert(ExportTasks, function()
+		
+		table.insert(cleanupTasks, function()
 			sharedState.PublicExportInstances[as] = nil
 		end)
 		
-		
 	end
+	
+	return exportAs
 	
 end
 
