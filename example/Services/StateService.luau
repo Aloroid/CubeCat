@@ -17,18 +17,21 @@ local StateService = CubeCat.CreateService({
 local StartTime = 0
 
 function StateService:getState()
-	return StateService.Public:getState()
-	
-end
-
-function StateService.Public:getState()
 	local difference = os.clock() - StartTime
 	
 	return math.floor(difference)
 	
 end
 
+function StateService.Public:getState()
+	assert(CubeCat.Permissions.has("readState"))
+	
+	return StateService:getState()
+end
+
 function StateService:Init()
+	CubeCat.Permissions.new("readState", "Read State", "Allows the client plugin to read the current state.")
+	
 	print("Initiated StateService")
 	StartTime = os.clock()
 	

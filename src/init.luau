@@ -10,6 +10,8 @@ local CubeCat = {
 	Import = require(script.Import),
 	Runtime = require(script.Runtime),
 	
+	Permissions = require(script.Permissions),
+	
 	Components = {
 		Background = require(Components.Decoration.Background),
 		Border = require(Components.Decoration.Border),

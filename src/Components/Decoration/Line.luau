@@ -35,7 +35,7 @@ local COMPONENT_ONLY_PROPERTIES = {
 local function Line(props: Line)
 	
 	local LineThickness = props.LineThickness or 2
-	local LineColor = props.LineColor or Enum.StudioStyleGuideColor.SubText
+	local LineColor = props.LineColor or Enum.StudioStyleGuideColor.DimmedText
 	local LineModifier = props.LineModifier
 	
 	local LineColor3 = Spring(Theme(LineColor, LineModifier), 40, 1)
