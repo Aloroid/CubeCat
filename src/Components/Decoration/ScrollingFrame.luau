@@ -7,7 +7,7 @@ local Packages = script.Parent.Parent.Parent.Parent
 local Components = script.Parent.Parent
 
 local Fusion = require(Packages.Fusion)
-local CubeCat = require(Packages.CubeCat)
+local Util = require(Packages.CubeCat.Utility)
 
 local Padding = require(Components.Decoration.Padding)
 
@@ -16,9 +16,9 @@ local Computed = Fusion.Computed
 local Children = Fusion.Children
 local Spring = Fusion.Spring
 
-local Theme = CubeCat.Util.Theme
-local unwrap = CubeCat.Util.unwrap
-local stripProps = CubeCat.Util.stripProps
+local Theme = Util.Theme
+local unwrap = Util.unwrap
+local stripProps = Util.stripProps
 
 type CanBeState<T> = Fusion.CanBeState<T>
 export type Background = {

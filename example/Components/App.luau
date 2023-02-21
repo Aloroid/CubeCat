@@ -4,7 +4,7 @@ local Packages = Plugin.Packages
 local Fusion = require(Packages.Fusion)
 local CubeCat = require(Packages.CubeCat)
 
-local Background = require(CubeCat.Components.Background)
+local Background = CubeCat.Components.Background
 
 local Children = Fusion.Children
 local Value = Fusion.Value

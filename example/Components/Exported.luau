@@ -7,8 +7,8 @@ local CubeCat = require(Packages.CubeCat)
 
 local StateService = require(Services.StateService)
 
-local Button =  require(CubeCat.Components.Button)
-local Text = require(CubeCat.Components.Text)
+local Button =  CubeCat.Components.Button
+local Text = CubeCat.Components.Text
 
 local OnEvent = Fusion.OnEvent
 

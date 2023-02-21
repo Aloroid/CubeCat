@@ -11,15 +11,15 @@ local Packages = script.Parent.Parent.Parent.Parent
 local Components = script.Parent.Parent
 
 local Fusion = require(Packages.Fusion)
-local CubeCat = require(Packages.CubeCat)
+local Util = require(Packages.CubeCat.Utility)
 
 local Image = require(Components.Display.Image)
 local Padding = require(Components.Decoration.Padding)
 
 local Children = Fusion.Children
 
-local Theme = CubeCat.Util.Theme
-local stripProps = CubeCat.Util.stripProps
+local Theme = Util.Theme
+local stripProps = Util.stripProps
 
 type CanBeState<T> = Fusion.CanBeState<T>
 export type Shadow = {

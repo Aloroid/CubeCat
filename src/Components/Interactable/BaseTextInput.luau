@@ -7,7 +7,7 @@ local TextService = game:GetService("TextService")
 local Packages = script.Parent.Parent.Parent.Parent
 
 local Fusion = require(Packages.Fusion)
-local CubeCat = require(Packages.CubeCat)
+local Util = require(Packages.CubeCat.Utility)
 
 local New = Fusion.New
 local Value = Fusion.Value
@@ -17,10 +17,10 @@ local OnEvent = Fusion.OnEvent
 local Out = Fusion.Out
 local Ref = Fusion.Ref
 
-local Theme = CubeCat.Util.Theme
-local unwrap = CubeCat.Util.unwrap
-local Statify = CubeCat.Util.Statify
-local stripProps = CubeCat.Util.stripProps
+local Theme = Util.Theme
+local unwrap = Util.unwrap
+local Statify = Util.Statify
+local stripProps = Util.stripProps
 
 type CanBeState<T> = Fusion.CanBeState<T>
 export type BaseTextInput = {

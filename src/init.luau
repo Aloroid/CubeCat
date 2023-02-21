@@ -1,5 +1,4 @@
 local Components = script.Components
-local Util = script.Utility
 
 local CubeCat = {
 	
@@ -12,40 +11,28 @@ local CubeCat = {
 	Runtime = require(script.Runtime),
 	
 	Components = {
-		Background = Components.Decoration.Background,
-		Border = Components.Decoration.Border,
-		Line = Components.Decoration.Line,
-		Padding = Components.Decoration.Padding,
-		Pane = Components.Decoration.Pane,
-		ScrollingFrame = Components.Decoration.ScrollingFrame,
-		Shadow = Components.Decoration.Shadow,
+		Background = require(Components.Decoration.Background),
+		Border = require(Components.Decoration.Border),
+		Line = require(Components.Decoration.Line),
+		Padding = require(Components.Decoration.Padding),
+		Pane = require(Components.Decoration.Pane),
+		ScrollingFrame = require(Components.Decoration.ScrollingFrame),
+		Shadow = require(Components.Decoration.Shadow),
 		
-		Image = Components.Display.Image,
-		Text = Components.Display.Text,
+		Image = require(Components.Display.Image),
+		Text = require(Components.Display.Text),
 		
-		Button = Components.Interactable.Button,
-		Checkbox = Components.Interactable.Checkbox,
-		Dropdown = Components.Interactable.Dropdown,
-		ExpandablePane = Components.Interactable.ExpandablePane,
-		ImageButton = Components.Interactable.ImageButton,
-		TextInput = Components.Interactable.TextInput,
+		Button = require(Components.Interactable.Button),
+		Checkbox = require(Components.Interactable.Checkbox),
+		Dropdown = require(Components.Interactable.Dropdown),
+		ExpandablePane = require(Components.Interactable.ExpandablePane),
+		ImageButton = require(Components.Interactable.ImageButton),
+		TextInput = require(Components.Interactable.TextInput),
 		
-		List = Components.Optimization.List
+		List = require(Components.Optimization.List)
 	},
 	
-	Util = {
-		guideState = require(Util.guideState),
-		mapGuideColor = require(Util.mapGuideColor),
-		Theme = require(Util.Theme),
-		
-		Statify = require(Util.Statify),
-		unwrap = require(Util.unwrap),
-		stripProps = require(Util.stripProps),
-		
-		quickInsert = require(Util.quickInsert),
-		quickRemove = require(Util.quickRemove),
-		
-	}
+	Util = require(script.Utility)
 }
 
 return CubeCat

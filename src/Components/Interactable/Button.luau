@@ -2,7 +2,7 @@ local Packages = script.Parent.Parent.Parent.Parent
 local Components = script.Parent.Parent
 
 local Fusion = require(Packages.Fusion)
-local CubeCat = require(Packages.CubeCat)
+local Util = require(Packages.CubeCat.Utility)
 
 local Text = require(Components.Display.Text)
 local Border = require(Components.Decoration.Border)
@@ -14,12 +14,12 @@ local Children = Fusion.Children
 local OnEvent = Fusion.OnEvent
 local Spring = Fusion.Spring
 
-local Theme = CubeCat.Util.Theme
-local Statify = CubeCat.Util.Statify
-local unwrap = CubeCat.Util.unwrap
-local stripProps = CubeCat.Util.stripProps
-local guideState = CubeCat.Util.guideState
-local mapGuideModifier = CubeCat.Util.mapGuideColor
+local Theme = Util.Theme
+local Statify = Util.Statify
+local unwrap = Util.unwrap
+local stripProps = Util.stripProps
+local guideState = Util.guideState
+local mapGuideModifier = Util.mapGuideColor
 
 type CanBeState<T> = Fusion.CanBeState<T>
 export type Button = {

@@ -8,13 +8,13 @@
 local Packages = script.Parent.Parent.Parent.Parent
 
 local Fusion = require(Packages.Fusion)
-local CubeCat = require(Packages.CubeCat)
+local Util = require(Packages.CubeCat.Utility)
 
 local New = Fusion.New
 local Computed = Fusion.Computed
 
-local unwrap = CubeCat.Util.unwrap
-local stripProps = CubeCat.Util.stripProps
+local unwrap = Util.unwrap
+local stripProps = Util.stripProps
 
 type CanBeState<T> = Fusion.CanBeState<T>
 export type Padding = {

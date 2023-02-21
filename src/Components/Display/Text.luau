@@ -5,13 +5,14 @@
 
 local Packages = script.Parent.Parent.Parent.Parent
 
-local CubeCat = require(Packages.CubeCat)
 local Fusion = require(Packages.Fusion)
+local Util = require(Packages.CubeCat.Utility)
 
 local New = Fusion.New
 local Spring = Fusion.Spring
-local Theme = CubeCat.Util.Theme
-local stripProps = CubeCat.Util.stripProps
+
+local Theme = Util.Theme
+local stripProps = Util.stripProps
 
 type CanBeState<T> = Fusion.CanBeState<T>
 export type Text = {

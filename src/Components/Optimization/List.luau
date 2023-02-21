@@ -13,12 +13,12 @@ local Packages = script.Parent.Parent.Parent.Parent
 local Components = script.Parent.Parent
 
 local Fusion = require(Packages.Fusion)
-local CubeCat = require(Packages.CubeCat)
+local Util = require(Packages.CubeCat.Utility)
 
 local ScrollingFrame = require(Components.Decoration.ScrollingFrame)
 
-local unwrap = CubeCat.Util.unwrap
-local stripProps = CubeCat.Util.stripProps
+local unwrap = Util.unwrap
+local stripProps = Util.stripProps
 
 local Value = Fusion.Value
 local Out = Fusion.Out

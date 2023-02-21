@@ -2,7 +2,7 @@ local Packages = script.Parent.Parent.Parent.Parent
 local Components = script.Parent.Parent
 
 local Fusion = require(Packages.Fusion)
-local CubeCat = require(Packages.CubeCat)
+local Util = require(Packages.CubeCat.Utility)
 
 local Background = require(Components.Decoration.Background)
 local Border = require(Components.Decoration.Border)
@@ -12,7 +12,7 @@ local New = Fusion.New
 local Computed = Fusion.Computed
 local Children = Fusion.Children
 
-local stripProps = CubeCat.Util.stripProps
+local stripProps = Util.stripProps
 
 type CanBeState<T> = Fusion.CanBeState<T>
 export type Pane = {
@@ -22,8 +22,6 @@ export type Pane = {
 	
 	PaneText: CanBeState<string>?,
 	
-	
-
 	[any]: any
 }
 

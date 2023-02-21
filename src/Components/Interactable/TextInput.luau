@@ -16,7 +16,7 @@ local Packages = script.Parent.Parent.Parent.Parent
 local Components = script.Parent.Parent
 
 local Fusion = require(Packages.Fusion)
-local CubeCat = require(Packages.CubeCat)
+local Util = require(Packages.CubeCat.Utility)
 
 local Background = require(Components.Decoration.Background)
 local BaseTextInput = require(Components.Interactable.BaseTextInput)
@@ -31,9 +31,9 @@ local Observer = Fusion.Observer
 local Cleanup = Fusion.Cleanup
 local Spring = Fusion.Spring
 
-local Statify = CubeCat.Util.Statify
-local unwrap = CubeCat.Util.unwrap
-local stripProps = CubeCat.Util.stripProps
+local Statify = Util.Statify
+local unwrap = Util.unwrap
+local stripProps = Util.stripProps
 
 type CanBeState<T> = Fusion.CanBeState<T>
 export type TextInput = {
