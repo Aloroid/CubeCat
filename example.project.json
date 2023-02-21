@@ -1,0 +1,28 @@
+{
+	"name": "CubeCat",
+	
+	"tree": {
+		"$className": "DataModel",
+		
+		"ServerStorage": {
+			
+			"ExamplePlugin": {
+				
+				"Packages": {
+					"$path": "src/Packages",
+					
+					"CubeCat": {
+						"$path": "src"
+					}
+					
+				},
+				
+				"$path": "example"
+				
+			}
+			
+		}
+		
+	}
+	
+}
