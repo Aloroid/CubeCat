@@ -4,7 +4,7 @@
 	"tree": {
 		"$className": "DataModel",
 		
-		"ServerScriptService": {
+		"ServerStorage": {
 			
 			"CubeCat": {
 				"$path": "src/Packages",
