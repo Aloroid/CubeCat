@@ -1,5 +1,6 @@
 --[[
-	Calls :Init on every service
+	Calls :Init on every service and allows other plugins to access this plugin.
+	TODO: Develop a proper public api
 	
 ]]
 
@@ -22,14 +23,14 @@ return function()
 		end
 	end
 	
-	-- We've initiated, let's open up the flood gates >:)
+	-- We've started
 	table.freeze(publicTables)
 	
-	if not _G.CubeCat then
-		_G.CubeCat = {}
+	if not shared.CubeCat then
+		shared.CubeCat = {}
 	end
 	
-	_G.CubeCat[plugin.Name] = function()
+	shared.CubeCat[plugin.Name] = function()
 		return publicTables
 	end
 	
