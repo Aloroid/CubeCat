@@ -115,16 +115,15 @@ local function BaseTextInput(props: BaseTextInput)
 			[Out "Text"] = text,
 			[Ref] = textBox,
 			
-			--[[[Cleanup] = Computed(function()
+			[Cleanup] = Computed(function()
 				-- Hacky solution to get the cursor position to update properly
 				unwrap(text)
 				local textBox = unwrap(textBox, false) :: TextBox
 				if textBox == nil then return end
-				local originalCursorPosition = textBox.CursorPosition
 				
 				textBox.CursorPosition -= 1
 				textBox.CursorPosition += 1
-			end)]]
+			end)
 			
 		}
 		
