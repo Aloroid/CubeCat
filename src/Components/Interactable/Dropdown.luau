@@ -33,7 +33,7 @@ export type Dropdown = {
 	AnchorPoint: CanBeState<Vector2>?,
 	
 	DropdownItems: CanBeState<{CanBeState<string>}>,
-	Selected: CanBeState<number>?,
+	Selected: CanBeState<string>?,
 	
 	MaxItems: CanBeState<number>?,
 
@@ -51,7 +51,7 @@ local function Dropdown(props: Dropdown)
 	
 	local expanded = Value(false)
 	local dropdownItems = props.DropdownItems
-	local selected = Statify(props.Selected)
+	local selected = Statify(props.Selected or "")
 	local maxItems = props.MaxItems or 5
 	local itemSize = 24
 	
@@ -62,7 +62,7 @@ local function Dropdown(props: Dropdown)
 		BackgroundColor = Enum.StudioStyleGuideColor.EmulatorDropDown,
 		
 		Text = Computed(function()
-			return unwrap(dropdownItems)[unwrap(selected)] or ""
+			return unwrap(selected) or ""
 		end),
 		
 		[OnEvent "Activated"] = function() expanded:set(not unwrap(expanded)) end,
@@ -163,7 +163,7 @@ local function Dropdown(props: Dropdown)
 												
 												[OnEvent "Activated"] = function()
 													expanded:set(false)
-													selected:set(key)
+													selected:set(value)
 												end
 												
 											}

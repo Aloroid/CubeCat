@@ -13,7 +13,7 @@ return function(target)
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		
 		DropdownItems = {"Apple", "Pear", "Grape", "Blackberry", "Cherry", "Pineapple", "A", "B", "C"},
-		Selected = 1
+		Selected = ""
 		
 	}
 	
