@@ -2,7 +2,7 @@
 name = "aloroid/cubecat"
 description = "A plugin framework designed to allow for interconnecting with other plugins"
 license = "MIT"
-version = "0.1.0-rc6"
+version = "0.1.0-rc7"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
