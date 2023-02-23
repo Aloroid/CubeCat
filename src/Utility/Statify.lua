@@ -26,7 +26,7 @@ local function Statify<T>(value: T): Fusion.Value<T>
 	
 	if type(value) == "table" and value.type == "State" then
 		
-		if value.kind == "Value" then
+		if value.kind == "Value" or value.kind == "Runtime" then
 			return value
 		else
 			local redirect = Value(value:get())
