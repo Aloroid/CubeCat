@@ -3,7 +3,8 @@ local sharedState = require(script.Parent.sharedState)
 
 type CubeCatService = {
 	Name: string,
-	Public: {[any]: any}
+	Public: {[any]: any}?,
+	ExportAll: boolean?
 	
 }
 
@@ -12,6 +13,7 @@ local function CreateService<T>(service: T & CubeCatService): T
 	
 	sharedState.Services[service.Name] = service
 	service.Public = service.Public or {}
+	service.Public.Name = service.Name
 	
 	return service
 end

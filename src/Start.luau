@@ -18,7 +18,7 @@ return function()
 				service:Init()
 			end)
 			
-			publicTables[serviceName] = service.Public
+			publicTables[serviceName] = if service.ExportAll then service else service.Public
 			
 		end
 	end
