@@ -23,6 +23,7 @@ local CubeCat = {
 		
 		Image = require(Components.Display.Image),
 		Text = require(Components.Display.Text),
+		AssetViewport = require(Components.Display.AssetViewport),
 		
 		Button = require(Components.Interactable.Button),
 		Checkbox = require(Components.Interactable.Checkbox),
