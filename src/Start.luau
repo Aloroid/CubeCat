@@ -13,14 +13,12 @@ return function()
 	local publicTables = {}
 	for serviceName, service in sharedState.Services do
 		if service.Init then
-			
 			task.spawn(function()
 				service:Init()
 			end)
-			
-			publicTables[serviceName] = if service.ExportAll then service else service.Public
-			
 		end
+		
+		publicTables[serviceName] = if service.ExportAll then service else service.Public
 	end
 	
 	-- We've started
