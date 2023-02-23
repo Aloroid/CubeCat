@@ -1,4 +1,5 @@
 local Packages = script.Parent.Parent.Parent.Parent
+local CubeCat = script.Parent.Parent.Parent
 
 local plugin = script:FindFirstAncestorWhichIsA("Plugin")
 

@@ -6,6 +6,7 @@
 ]]
 
 local Packages = script.Parent.Parent.Parent.Parent
+local CubeCat = script.Parent.Parent.Parent
 
 local Fusion = require(Packages.Fusion)
 local Util = require(CubeCat.Utility)
