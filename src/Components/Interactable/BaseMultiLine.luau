@@ -18,6 +18,7 @@ local Computed = Fusion.Computed
 local Children = Fusion.Children
 local OnEvent = Fusion.OnEvent
 local Out = Fusion.Out
+local Cleanup = Fusion.Cleanup
 local Ref = Fusion.Ref
 
 local Theme = Util.Theme
@@ -112,7 +113,18 @@ local function BaseTextInput(props: BaseTextInput)
 			end,
 			
 			[Out "Text"] = text,
-			[Ref] = textBox
+			[Ref] = textBox,
+			
+			--[[[Cleanup] = Computed(function()
+				-- Hacky solution to get the cursor position to update properly
+				unwrap(text)
+				local textBox = unwrap(textBox, false) :: TextBox
+				if textBox == nil then return end
+				local originalCursorPosition = textBox.CursorPosition
+				
+				textBox.CursorPosition -= 1
+				textBox.CursorPosition += 1
+			end)]]
 			
 		}
 		
