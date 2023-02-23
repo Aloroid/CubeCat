@@ -1,0 +1,166 @@
+--[[
+	AssetViewports are used to display objects or assets inside UI.
+	
+]]
+
+local Packages = script.Parent.Parent.Parent.Parent
+local CubeCat = script.Parent.Parent.Parent
+local Components = script.Parent.Parent
+
+local Fusion = require(Packages.Fusion)
+local Util = require(CubeCat.Utility)
+
+local Background = require(Components.Decoration.Background)
+local Border = require(Components.Decoration.Border)
+
+local New = Fusion.New
+local Computed = Fusion.Computed
+local Children = Fusion.Children
+local OnEvent = Fusion.OnEvent
+
+local Statify = Util.Statify
+local getIdealCameraCFrame = Util.getIdealCameraCFrame
+local unwrap = Util.unwrap
+local stripProps = Util.stripProps
+
+type CanBeState<T> = Fusion.CanBeState<T>
+export type AssetViewport = {
+	Position: CanBeState<UDim2>?,
+	Size: CanBeState<UDim2>?,
+	AnchorPoint: CanBeState<Vector2>?,
+	
+	CFrame: CanBeState<CFrame>?,
+	Focus: CanBeState<CFrame>?,
+	Draggable: CanBeState<boolean>?,
+	
+	Object: CanBeState<Instance>?,
+
+	[any]: any
+}
+
+local COMPONENT_ONLY_PROPERTIES = {
+	"CFrame",
+	"Focus",
+	"Draggable",
+	"Object"
+	
+}
+
+local function AssetViewport(props: AssetViewport)
+	
+	local object = Computed(function()
+		local object: Instance = unwrap(props.Object)
+		
+		if not object then return end
+		
+		object = object:Clone()
+		
+		if object:IsA("Model") then
+			object:MoveTo(Vector3.zero)
+		elseif object:IsA("BasePart") then
+			object.Position = Vector3.new()
+		end
+		
+		return object
+	end, Fusion.cleanup)
+	local cframe = Statify(props.CFrame or getIdealCameraCFrame(unwrap(object), 30))
+	local focus = props.Focus or CFrame.new()
+	local isOrbitDragging = false
+	local draggable = if props.Draggable ~= nil then props.Draggable else true
+	local isShiftDown = false
+	
+	local Camera = New "Camera" {
+		CFrame = cframe,
+		Focus = focus,
+		
+		FieldOfView = 30
+		
+	}
+	
+	local function zoom(zoomFactor)
+		local current = unwrap(cframe)
+		local focus = unwrap(focus)
+		
+		local distance = (current.Position - focus.Position).Magnitude
+		distance = distance ~= distance and 0 or distance
+		
+		local moveAmount = math.max(distance * 0.1, 0.1)
+		local targetCFame = current * CFrame.new(0, 0, zoomFactor * moveAmount)
+		
+		cframe:set(targetCFame)
+	end
+	
+	local AssetViewport = Background {
+		
+		Size = UDim2.fromOffset(256, 256),
+		BackgroundColor = Enum.StudioStyleGuideColor.ViewPortBackground,
+		
+		[Children] = {
+			Border {
+				BorderColor = Enum.StudioStyleGuideColor.InputFieldBorder
+			},
+			New "UICorner" {
+				CornerRadius = UDim.new(0, 8)
+			},
+			
+			New "ViewportFrame" {
+				
+				Size = UDim2.fromScale(1, 1),
+				
+				BackgroundTransparency = 1,
+				
+				CurrentCamera = Camera,
+				
+				[Children] = object,
+				
+				[OnEvent "InputBegan"] = function(input: InputObject)
+					if input.UserInputType == Enum.UserInputType.MouseButton2 then
+						isOrbitDragging = true
+					elseif input.KeyCode == Enum.KeyCode.LeftShift or input.KeyCode == Enum.KeyCode.RightShift then
+						isShiftDown = true
+					end
+				end,
+				
+				[OnEvent "InputChanged"] = function(input: InputObject)
+					
+					if not isOrbitDragging or draggable == false then return end
+					if input.UserInputType ~= Enum.UserInputType.MouseMovement then return end
+					
+					local targetFocus = unwrap(focus)
+					local targetCFrame = targetFocus:ToObjectSpace(unwrap(cframe))
+					
+					targetCFrame = CFrame.fromAxisAngle(targetCFrame.RightVector, input.Delta.Y * -0.02) * targetCFrame
+					targetCFrame = CFrame.fromAxisAngle(Vector3.yAxis, input.Delta.X * -0.02) * targetCFrame
+					
+					cframe:set(Camera.Focus:ToWorldSpace(targetCFrame))
+						
+				end,
+				
+				[OnEvent "InputEnded"] = function(input: InputObject)
+					if input.UserInputType == Enum.UserInputType.MouseButton2 then
+						isOrbitDragging = false
+					elseif input.KeyCode == Enum.KeyCode.LeftShift or input.KeyCode == Enum.KeyCode.RightShift then
+						isShiftDown = false
+					end
+				end,
+				
+				[OnEvent "MouseWheelForward"] = function()
+					zoom(-3 / (isShiftDown and 5 or 1))
+				end,
+				
+				[OnEvent "MouseWheelBackward"] = function()
+					zoom(3 / (isShiftDown and 5 or 1))
+				end
+				
+			}
+			
+		}
+		
+	}
+	
+	
+	return Fusion.Hydrate(AssetViewport)(stripProps(props, COMPONENT_ONLY_PROPERTIES))
+	
+end
+
+return AssetViewport

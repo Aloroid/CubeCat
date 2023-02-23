@@ -11,5 +11,6 @@ return {
 	Theme = require(script.Theme),
 	Statify = require(script.Statify),
 	
+	getIdealCameraCFrame = require(script.getIdealCameraCFrame),
 	
 }
