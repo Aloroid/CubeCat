@@ -3,7 +3,7 @@ local Packages = script.Parent.Parent.Parent.Parent
 local plugin = script:FindFirstAncestorWhichIsA("Plugin")
 
 local Fusion = require(Packages.Fusion)
-local Util = require(Packages.CubeCat.Utility)
+local Util = require(CubeCat.Utility)
 
 local stripProps = Util.stripProps
 

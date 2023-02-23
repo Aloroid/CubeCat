@@ -1,6 +1,9 @@
 local HttpService = game:GetService("HttpService")
+
 local Packages = script.Parent.Parent.Parent
-local Components = Packages.CubeCat.Components
+local CubeCat = script.Parent.Parent
+
+local Components = CubeCat.Components
 
 local Fusion = require(Packages.Fusion)
 

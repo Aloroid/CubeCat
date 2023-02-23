@@ -7,7 +7,7 @@ local TextService = game:GetService("TextService")
 local Packages = script.Parent.Parent.Parent.Parent
 
 local Fusion = require(Packages.Fusion)
-local Util = require(Packages.CubeCat.Utility)
+local Util = require(CubeCat.Utility)
 
 local New = Fusion.New
 local Value = Fusion.Value

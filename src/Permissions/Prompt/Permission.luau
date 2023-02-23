@@ -1,8 +1,9 @@
 local Packages = script.Parent.Parent.Parent.Parent
-local Components = Packages.CubeCat.Components
+local CubeCat = script.Parent.Parent.Parent
+local Components = CubeCat.Components
 
 local Fusion = require(Packages.Fusion)
-local Util = require(Packages.CubeCat.Utility)
+local Util = require(CubeCat.Utility)
 
 local Background = require(Components.Decoration.Background)
 local Line = require(Components.Decoration.Line)

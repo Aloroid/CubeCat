@@ -1,7 +1,8 @@
 local Packages = script.Parent.Parent.Parent.Parent
+local CubeCat = script.Parent.Parent.Parent
 
 local Fusion = require(Packages.Fusion)
-local Util = require(Packages.CubeCat.Utility)
+local Util = require(CubeCat.Utility)
 
 local New = Fusion.New
 local Computed = Fusion.Computed
