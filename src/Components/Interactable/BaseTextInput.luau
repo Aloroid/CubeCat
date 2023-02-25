@@ -150,7 +150,7 @@ local function BaseTextInput(props: BaseTextInput)
 			
 			BackgroundTransparency = 1,
 			
-			Active = Computed(function() return not unwrap(disabled) end),
+			TextEditable = Computed(function() return not unwrap(disabled) end),
 			
 			Text = text,
 			PlaceholderText = props.PlaceholderText,

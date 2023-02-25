@@ -150,7 +150,7 @@ local function TextInput(props: TextInput)
 				Selected = focused,
 				Disabled = disabled,
 				
-				BackgroundColor = Enum.StudioStyleGuideColor.ViewPortBackground,
+				BackgroundColor = Enum.StudioStyleGuideColor.InputFieldBackground,
 				BorderColor = Computed(function()
 					if unwrap(fail) then
 						return Enum.StudioStyleGuideColor.ErrorText
