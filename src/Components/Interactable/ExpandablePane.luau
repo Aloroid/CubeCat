@@ -143,7 +143,7 @@ local function ExpandablePane(props: ExpandablePane)
 							props[Children]
 						},
 						
-						[OnEvent "MouseEnter"] = function()
+						[OnEvent "MouseMoved"] = function()
 							if unwrap(expanded) then
 								hovering:set(false)
 							end

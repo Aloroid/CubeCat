@@ -32,6 +32,7 @@ export type AssetViewport = {
 	CFrame: CanBeState<CFrame>?,
 	Focus: CanBeState<CFrame>?,
 	Draggable: CanBeState<boolean>?,
+	DoNotOverwriteCFrame: CanBeState<boolean>?,
 	
 	Object: CanBeState<Instance>?,
 
@@ -48,6 +49,8 @@ local COMPONENT_ONLY_PROPERTIES = {
 
 local function AssetViewport(props: AssetViewport)
 	
+	local noOverwrite = props.DoNotOverwriteCFrame
+	local cframe = Statify(props.CFrame)
 	local object = Computed(function()
 		local object: Instance = unwrap(props.Object)
 		
@@ -56,14 +59,18 @@ local function AssetViewport(props: AssetViewport)
 		object = object:Clone()
 		
 		if object:IsA("Model") then
-			object:MoveTo(Vector3.zero)
+			object:TranslateBy(-object:GetBoundingBox().Position)
 		elseif object:IsA("BasePart") then
 			object.Position = Vector3.new()
 		end
 		
+		-- Overwrites the CFrame with a "ideal" one.
+		if not unwrap(noOverwrite) then
+			cframe:set(getIdealCameraCFrame(object, 30))
+		end
+		
 		return object
 	end, Fusion.cleanup)
-	local cframe = Statify(props.CFrame or getIdealCameraCFrame(unwrap(object), 30))
 	local focus = props.Focus or CFrame.new()
 	local isOrbitDragging = false
 	local draggable = if props.Draggable ~= nil then props.Draggable else true

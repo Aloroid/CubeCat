@@ -37,6 +37,8 @@ export type BaseTextInput = {
 	Disabled: CanBeState<boolean>?,
 	Focused: CanBeState<boolean>?, -- READ-ONLY
 	
+	FocusLost: CanBeState<(enterPressed: boolean) -> ()>?,
+	
 	[any]: any
 }
 
@@ -48,7 +50,8 @@ local COMPONENT_ONLY_PROPERTIES = {
 	"TextSize",
 	"Font",
 	"Disabled",
-	"Focused"
+	"Focused",
+	"FocusLost"
 	
 }
 
@@ -165,6 +168,8 @@ local function BaseTextInput(props: BaseTextInput)
 			[OnEvent "FocusLost"] = function()
 				focused:set(false)
 			end,
+			
+			[OnEvent "FocusLost"] = props.FocusLost,
 			
 			[Out "Text"] = text,
 			[Out "CursorPosition"] = cursorPosition,

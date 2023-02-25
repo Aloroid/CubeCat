@@ -48,9 +48,11 @@ export type TextInput = {
 	ErrorLocation: CanBeState<"Bottom" | "Right" | "None">?,
 	
 	Disabled: CanBeState<boolean>?,
+	Focused: CanBeState<boolean>?,
 	
 	Validator: CanBeState<(text: string) -> (boolean, string)>?,
 	Filter: CanBeState<(text: string) -> string>?,
+	FocusLost: CanBeState<(text: string) -> string>?,
 	
 	[any]: any
 }
@@ -63,6 +65,8 @@ local COMPONENT_ONLY_PROPERTIES = {
 	"Validator",
 	"Filter",
 	"Disabled",
+	"Focused",
+	"FocusLost",
 	Children
 	
 }
@@ -72,7 +76,7 @@ local function TextInput(props: TextInput)
 	local text = Statify(props.Text or "")
 	local fail = Value(false)
 	local message = Value("")
-	local focused = Value(false)
+	local focused = Statify(props.Focused or false)
 	local hovering = Value(false)
 	local filter = props.Filter or function() return end
 	local validator = props.Validator or function() return true end
@@ -166,7 +170,9 @@ local function TextInput(props: TextInput)
 						PlaceholderText = props.PlaceholderText,
 						
 						Disabled = disabled,
-						Focused = focused
+						Focused = focused,
+						
+						FocusLost = props.FocusLost
 					},
 					
 					props[Children]
