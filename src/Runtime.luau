@@ -9,8 +9,8 @@ local Computed = Fusion.Computed
 
 local function Runtime<T>(func: (old: T?) -> T, set: ((new: T) -> ())?): Fusion.Computed<T>
 	
-	local result, success = func(nil)
-	local realValue = Value(if success ~= false then result else nil)
+	local result, _ = func(nil)
+	local realValue = Value(result)
 	local wrapper = Computed(function()
 		return realValue:get()
 	end, Fusion.doNothing)

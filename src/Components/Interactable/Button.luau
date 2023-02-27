@@ -68,6 +68,7 @@ local COMPONENT_ONLY_PROPERTIES = {
 	"VerticalAlignment",
 	"HorizontalAlignment",
 	"NoText",
+	"NoPadding",
 	Children
 }
 local CORNER_RADIUS = 3
