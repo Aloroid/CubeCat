@@ -17,6 +17,7 @@ local New = Fusion.New
 local Computed = Fusion.Computed
 local Children = Fusion.Children
 local OnEvent = Fusion.OnEvent
+local Cleanup = Fusion.Cleanup
 
 local Statify = Util.Statify
 local getIdealCameraCFrame = Util.getIdealCameraCFrame
@@ -30,6 +31,7 @@ export type AssetViewport = {
 	AnchorPoint: CanBeState<Vector2>?,
 	
 	CFrame: CanBeState<CFrame>?,
+	ObjectCFrame: CanBeState<CFrame>?,
 	Focus: CanBeState<CFrame>?,
 	Draggable: CanBeState<boolean>?,
 	DoNotOverwriteCFrame: CanBeState<boolean>?,
@@ -41,15 +43,18 @@ export type AssetViewport = {
 
 local COMPONENT_ONLY_PROPERTIES = {
 	"CFrame",
+	"ObjectCFrame",
 	"Focus",
 	"Draggable",
-	"Object"
+	"Object",
+	"DoNotOverwriteCFrame"
 	
 }
 
 local function AssetViewport(props: AssetViewport)
 	
 	local noOverwrite = props.DoNotOverwriteCFrame
+	local objectCFrame = props.ObjectCFrame or CFrame.new()
 	local cframe = Statify(props.CFrame)
 	local object = Computed(function()
 		local object: Instance = unwrap(props.Object)
@@ -57,12 +62,6 @@ local function AssetViewport(props: AssetViewport)
 		if not object then return end
 		
 		object = object:Clone()
-		
-		if object:IsA("Model") then
-			object:TranslateBy(-object:GetBoundingBox().Position)
-		elseif object:IsA("BasePart") then
-			object.Position = Vector3.new()
-		end
 		
 		-- Overwrites the CFrame with a "ideal" one.
 		if not unwrap(noOverwrite) then
@@ -75,6 +74,19 @@ local function AssetViewport(props: AssetViewport)
 	local isOrbitDragging = false
 	local draggable = if props.Draggable ~= nil then props.Draggable else true
 	local isShiftDown = false
+	
+	local changeObjectCFrame = Computed(function()
+		local object = unwrap(object)
+		
+		if object == nil then return end
+		
+		if object:IsA("Model") then
+			object:PivotTo(unwrap(objectCFrame))
+		elseif object:IsA("BasePart") then
+			object.CFrame = unwrap(objectCFrame)
+		end
+		
+	end)
 	
 	local Camera = New "Camera" {
 		CFrame = cframe,
@@ -161,7 +173,9 @@ local function AssetViewport(props: AssetViewport)
 				
 			}
 			
-		}
+		},
+		
+		[Cleanup] = changeObjectCFrame
 		
 	}
 	

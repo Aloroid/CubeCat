@@ -12,7 +12,8 @@ return function(target)
 		Position = UDim2.fromScale(0.5, 0.5),
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		
-		Object = Instance.new("Part")
+		Object = Instance.new("Part"),
+		ObjectCFrame = CFrame.new(0, 3, 0)
 		
 	}
 	
