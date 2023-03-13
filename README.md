@@ -68,7 +68,6 @@ Projects should probably be structured like the following:
 	- services/
 	- modules/
 	- components/
-	- buttons.json
 
 CubeCat is available on Wally, and comes with multiple other libraries installed with it.
 
