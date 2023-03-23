@@ -1,6 +1,6 @@
 local RunService = game:GetService("RunService")
 
-local Packages = script.Parent.Parent.Parent.Packages
+local Packages = script.Parent.Parent.Parent.Parent
 
 local Fusion = require(Packages.Fusion)
 local unwrap = require(script.Parent.Parent.unwrap)
