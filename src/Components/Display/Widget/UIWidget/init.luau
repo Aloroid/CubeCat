@@ -75,6 +75,7 @@ local function Widget(props: Widget)
 		
 		IgnoreGuiInset = false,
 		Enabled = props.InitialEnabled,
+		ZIndexBehavior = Enum.ZIndexBehavior.Global,
 		
 		[Children] = {
 			
@@ -107,7 +108,7 @@ local function Widget(props: Widget)
 						FillDirection = Enum.FillDirection.Horizontal,
 						NoPadding = true,
 						
-						ZIndex = 2,
+						ZIndex = 1,
 						
 						[Children] = {
 							
@@ -132,7 +133,6 @@ local function Widget(props: Widget)
 						
 					},
 					
-					
 					Background {
 						Name = "Container",
 						
@@ -143,6 +143,7 @@ local function Widget(props: Widget)
 						
 						NoList = true,
 						NoPadding = true,
+						ClipsDescendants = true,
 						
 						[Children] = props[Children]
 						
