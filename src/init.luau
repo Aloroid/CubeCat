@@ -12,6 +12,8 @@ local CubeCat = {
 	
 	Permissions = require(script.Permissions),
 	
+	Studio = require(script.Studio),
+	
 	Components = {
 		Background = require(Components.Decoration.Background),
 		Border = require(Components.Decoration.Border),
@@ -24,6 +26,7 @@ local CubeCat = {
 		Image = require(Components.Display.Image),
 		Text = require(Components.Display.Text),
 		AssetViewport = require(Components.Display.AssetViewport),
+		Widget = require(Components.Display.Widget),
 		
 		Button = require(Components.Interactable.Button),
 		Checkbox = require(Components.Interactable.Checkbox),

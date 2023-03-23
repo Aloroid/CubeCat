@@ -13,6 +13,9 @@ local Components = Plugin.Components
 local CubeCat = require(Packages.CubeCat)
 local App = require(Components.App)
 local Exported = require(Components.Exported)
+local Fusion = require(Packages.Fusion)
+
+local Value = Fusion.Value
 
 local AppToolbarService = CubeCat.CreateService({
 	Name = "AppToolbarService",
@@ -27,50 +30,33 @@ function AppToolbarService:GetToolbar()
 	return toolbar
 end
 
-local widget
-function AppToolbarService:GetWidget()
-	if widget then return widget end
-	
-	local guiInfo = DockWidgetPluginGuiInfo.new(
-		Enum.InitialDockState.Float,
-		true,
-		false,
-		200,
-		200,
-		200,
-		200
-	)
-	widget = plugin:CreateDockWidgetPluginGui("example", guiInfo)
-	
-	return widget
-	
-end
-
 function AppToolbarService:Init()
-	local toolbar = AppToolbarService:GetToolbar()
-	local button = toolbar:CreateButton(
-		"exampleInterface",
-		"Opens Example Interface",
-		"",
-		"Example"
-	)
 	
-	local widget = AppToolbarService:GetWidget()
-	local enabled = widget.Enabled
-	
-	local function swapState()
-		enabled = not enabled
-		button:SetActive(enabled)
-		widget.Enabled = enabled		
+	if CubeCat.Studio.IsFake == false then
+		local toolbar = AppToolbarService:GetToolbar()
+		local button = toolbar:CreateButton(
+			"exampleInterface",
+			"Opens Example Interface",
+			"",
+			"Example"
+		)
+		
+		local enabled = Value(true)
+		local widget = App {}
+		
+		local function swapState()
+			enabled:set(not enabled)
+			button:SetActive(enabled:get())
+			widget.Enabled = enabled:get()
+		end
+		
+		button:SetActive(enabled:get())
+		button.Click:Connect(swapState)
+		widget:BindToClose(swapState)
+	else
+		App {}
 	end
 	
-	button:SetActive(enabled)
-	button.Click:Connect(swapState)
-	widget:BindToClose(swapState)
-	
-	App {
-		Parent = widget
-	}
 	Exported {}
 	
 end

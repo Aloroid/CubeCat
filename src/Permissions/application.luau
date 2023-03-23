@@ -1,6 +1,6 @@
 local MarketplaceService = game:GetService("MarketplaceService")
 
-local plugin = script:FindFirstAncestorWhichIsA("Plugin")
+local plugin = script:FindFirstAncestorWhichIsA("Plugin") or {Name = "Game Plugin"}
 
 local getEmptyData = require(script.Parent.getEmptyData)
 
@@ -22,4 +22,4 @@ if cloudId then
 	return getEmptyData(cloudInstance)
 end
 
-return getEmptyData("What??")
+return getEmptyData("Game Plugin")

@@ -103,7 +103,7 @@ local function Checkbox(props: Checkbox)
 						elseif checked == true then "checked"
 						else "unchecked",
 						if disabled then "_disabled" else "",
-						currentTheme.Name:lower()
+						currentTheme:lower()
 					)
 					
 					return result

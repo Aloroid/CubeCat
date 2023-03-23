@@ -24,6 +24,9 @@ return function()
 	-- We've started
 	table.freeze(publicTables)
 	
+	-- TODO: Write Compatability for Game Plugins
+	if plugin == nil then return end
+	
 	if not shared.CubeCat then
 		shared.CubeCat = {}
 	end
