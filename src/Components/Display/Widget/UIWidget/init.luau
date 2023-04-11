@@ -1,4 +1,3 @@
-local GuiService = game:GetService("GuiService")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -7,7 +6,8 @@ local Components = script.Parent.Parent.Parent
 local Packages = script.Parent.Parent.Parent.Parent.Parent
 local CubeCat = script.Parent.Parent.Parent.Parent
 
-local Text = require(Components.Display.Text)
+local Topbar = require(script.Topbar)
+local Shadow = require(Components.Decoration.Shadow)
 local Background = require(Components.Decoration.Background)
 local Border = require(Components.Decoration.Border)
 
@@ -42,6 +42,8 @@ export type Widget = {
 }
 
 local COMPONENT_ONLY_PROPERTIES = {
+	"Position",
+	
 	"Title",
 	"WidgetId",
 	
@@ -56,122 +58,171 @@ local COMPONENT_ONLY_PROPERTIES = {
 	Children
 }
 
+local RESIZE_RANGE = 5
+
 local function Widget(props: Widget)
 	
 	local LocalPlayer = Players.LocalPlayer
 	assert(LocalPlayer, "[CubeCat] This must be ran on a client")
 	
 	local title = props.Title
-	local position = Value(Vector2.zero)
+	local position = Value(props.Position or Vector2.zero)
 	local size = Value(props.FloatingSize)
+	local resizing = false
+	local minimumSize = props.MinimumSize
 	
-	local dragging = false
-	local offset = Vector2.new()
+	local top = Vector2.new()
+	local bottom = Vector2.new()
+	local resizingTop = false
+	local resizingLeft = false
+	local resizingBottom = false
+	local resizingRight = false
 	
 	-- Create a fake Widget
 	local Widget = New "ScreenGui" {
 		Name = title,
 		Parent = LocalPlayer:WaitForChild("PlayerGui"),
 		
-		IgnoreGuiInset = false,
+		IgnoreGuiInset = true,
 		Enabled = props.InitialEnabled,
 		ZIndexBehavior = Enum.ZIndexBehavior.Global,
 		
 		[Children] = {
 			
-			Background {
-				Name = "Widget",
-				
-				BackgroundColor = Enum.StudioStyleGuideColor.MainBackground,
+			Shadow {
 				
 				Position = Computed(function()
 					local currentPosition = unwrap(position)
 					return UDim2.fromOffset(currentPosition.X, currentPosition.Y)
 				end),
-				Size = Computed(function()
-					local currentSize = unwrap(size)
-					return UDim2.fromOffset(currentSize.X, currentSize.Y)
-				end),
-				
-				Padding = 2,
-				ListPadding = 1,
 				
 				[Children] = {
 					
-					Background {
-						Name = "Topbar",
-						
-						Size = UDim2.new(1, 0, 0, 24),
-						
-						BackgroundColor = Enum.StudioStyleGuideColor.Button,
-						
+					New "UIListLayout" {
 						FillDirection = Enum.FillDirection.Horizontal,
-						NoPadding = true,
+						HorizontalAlignment = Enum.HorizontalAlignment.Center,
+						VerticalAlignment = Enum.VerticalAlignment.Center
+					},
+					
+					Background {
+						Name = "Widget",
 						
-						ZIndex = 1,
+						BackgroundColor = Enum.StudioStyleGuideColor.MainBackground,
+						
+						Size = Computed(function()
+							local currentSize = unwrap(size)
+							return UDim2.fromOffset(currentSize.X, currentSize.Y)
+						end),
+						
+						Padding = 2,
+						ListPadding = 1,
 						
 						[Children] = {
 							
-							Text {
-								Size = UDim2.new(1, -24, 1, 0),
-								
-								Text = props.Title,
-								TextColor = Enum.StudioStyleGuideColor.SubText,
-								TextSize = 14
+							Topbar {
+								Title = title,
+								Position = position
 							},
 							
-							Border {}
+							Background {
+								Name = "Container",
+								
+								Size = UDim2.new(1, 0, 1, -24),
+								Position = UDim2.fromOffset(0, 24),
+								
+								BackgroundTransparency = 1,
+								
+								NoList = true,
+								NoPadding = true,
+								ClipsDescendants = true,
+								
+								[Children] = props[Children]
+								
+							},
 							
-						},
-						
-						[OnEvent "InputBegan"] = function(input: InputObject)
-							if input.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
+							Border {},
 							
-							offset = position:get() - Vector2.new(input.Position.X, input.Position.Y)
-							dragging = true
-						end
+							New "UICorner" {
+								CornerRadius = UDim.new(0, 2)
+							}
+							
+						}
 						
 					},
 					
-					Background {
-						Name = "Container",
-						
-						Size = UDim2.new(1, 0, 1, -24),
-						Position = UDim2.fromOffset(0, 24),
-						
-						BackgroundTransparency = 1,
-						
-						NoList = true,
-						NoPadding = true,
-						ClipsDescendants = true,
-						
-						[Children] = props[Children]
-						
-					},
-					
-					Border {},
-					
-					New "UICorner" {
-						CornerRadius = UDim.new(0, 2)
-					}
-					
-				}
+				},
 				
-			},
+				[OnEvent "MouseLeave"] = function()
+					if resizing then return end
+					UserInputService.MouseIcon = "rbxasset://textures/Cursors/KeyboardMouse/ArrowFarCursor.png"
+				end,
+				
+				[OnEvent "MouseMoved"] = function(x, y)
+					if resizing then return end
+					x -= unwrap(position).X
+					y -= unwrap(position).Y
+					
+					resizingTop = y < RESIZE_RANGE
+					resizingLeft = x < RESIZE_RANGE
+					resizingBottom = y > (unwrap(size).Y - RESIZE_RANGE)
+					resizingRight = x > (unwrap(size).X - RESIZE_RANGE)
+					
+					UserInputService.MouseIcon = "rbxasset://textures/Cursors/KeyboardMouse/ArrowFarCursor.png"
+					
+					if (resizingTop and resizingLeft) or (resizingBottom and resizingRight) then
+						UserInputService.MouseIcon = "rbxasset://textures/StudioUIEditor/icon_resize3.png"
+					elseif (resizingTop and resizingRight) or (resizingBottom and resizingLeft) then
+						UserInputService.MouseIcon = "rbxasset://textures/StudioUIEditor/icon_resize1.png"
+					elseif resizingTop or resizingBottom then
+						UserInputService.MouseIcon = "rbxasset://textures/StudioUIEditor/icon_resize4.png"
+					elseif resizingLeft or resizingRight then
+						UserInputService.MouseIcon = "rbxasset://textures/StudioUIEditor/icon_resize2.png"
+					end
+					
+				end,
+				
+				[OnEvent "InputBegan"] = function(input: InputObject)
+					if input.UserInputType ~= Enum.UserInputType.MouseButton1 and input.UserInputType ~= Enum.UserInputType.Touch then return end
+					resizing = true
+					top = unwrap(position)
+					bottom = unwrap(position) + unwrap(size)
+				end,
+				
+				[Cleanup] = RunService.RenderStepped:Connect(function()
+					local mposition = UserInputService:GetMouseLocation()
+					local x, y = mposition.X, mposition.Y
+					
+					resizing = resizing and (
+						UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)
+						or UserInputService:IsMouseButtonPressed(Enum.UserInputType.Touch)
+					)
+					
+					if resizing == false then return end
+					
+					if resizingBottom then
+						size:set(Vector2.new(unwrap(size).X, math.max(y - top.Y, minimumSize.Y)))
+					end
+					if resizingRight then
+						size:set(Vector2.new(math.max(x - top.X, minimumSize.X), unwrap(size).Y))
+					end
+					if resizingTop then
+						local ySize = math.max(bottom.Y - y, minimumSize.Y)
+						size:set(Vector2.new(unwrap(size).X, ySize))
+						position:set(Vector2.new(unwrap(position).X, math.min(y, bottom.Y - minimumSize.Y)))
+					end
+					if resizingLeft then
+						local xSize = math.max(bottom.X - x, minimumSize.X)
+						size:set(Vector2.new(xSize, unwrap(size).Y))
+						position:set(Vector2.new(math.min(x, bottom.X - minimumSize.X), unwrap(position).Y))
+					end
+					
+					
+					
+				end)
+				
+			}
 			
-		},
-		
-		[Cleanup] = RunService.Heartbeat:Connect(function()
-			-- Handles dragging
-			if dragging == false then return end
-			if UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) == false then
-				dragging = false
-				return
-			end
-			
-			position:set(UserInputService:GetMouseLocation() + offset - GuiService:GetGuiInset())
-			
-		end)
+		}
 		
 	}
 	
