@@ -1,6 +1,7 @@
 [package]
 name = "aloroid/cubecat"
 description = "A plugin framework designed to allow for interconnecting with other plugins"
+exclude = ["Packages"]
 license = "MIT"
 version = "0.3.0"
 registry = "https://github.com/UpliftGames/wally-index"
