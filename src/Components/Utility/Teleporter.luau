@@ -26,10 +26,12 @@ local stripProps = Util.stripProps
 
 type CanBeState<T> = Fusion.CanBeState<T>
 export type TopLayer = {
+	IgnoreOffset: CanBeState<boolean>?,
 	[any]: any
 }
 
 local COMPONENT_ONLY_PROPERTIES = {
+	"IgnoreOffset",
 	Children
 	
 }
@@ -103,6 +105,10 @@ local function TopLayer(props: TopLayer)
 				return UDim2.fromOffset(size.X, size.Y)
 			end),
 			Position = Computed(function()
+				if unwrap(props.IgnoreOffset) then
+					return UDim2.fromOffset(0, 0)
+				end
+				
 				local position = unwrap(realPosition)
 				if position == nil then return UDim2.new() end
 				return UDim2.fromOffset(position.X, position.Y)
@@ -126,7 +132,10 @@ local function TopLayer(props: TopLayer)
 		[OnEvent "AncestryChanged"] = function() update:set(math.random()) end,
 		[Out "Parent"] = parent,
 		
-		[Cleanup] = BaseClone
+		[Cleanup] = function()
+			BaseClone:Destroy()
+			print("cleaned up")
+		end
 		
 	}
 	
