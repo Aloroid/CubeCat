@@ -25,6 +25,7 @@ local CubeCat = {
 		
 		Image = require(Components.Display.Image),
 		Text = require(Components.Display.Text),
+		Table = require(Components.Display.Table),
 		AssetViewport = require(Components.Display.AssetViewport),
 		Widget = require(Components.Display.Widget),
 		
@@ -34,6 +35,7 @@ local CubeCat = {
 		ExpandablePane = require(Components.Interactable.ExpandablePane),
 		ImageButton = require(Components.Interactable.ImageButton),
 		TextInput = require(Components.Interactable.TextInput),
+		SplitPane = require(Components.Interactable.SplitPane),
 		
 		List = require(Components.Optimization.List)
 	},
