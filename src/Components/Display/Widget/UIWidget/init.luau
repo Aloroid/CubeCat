@@ -22,6 +22,7 @@ local Children = Fusion.Children
 local Cleanup = Fusion.Cleanup
 
 local unwrap = Util.unwrap
+local Statify = Util.Statify
 local stripProps = Util.stripProps
 
 type CanBeState<T> = Fusion.CanBeState<T>
@@ -70,6 +71,10 @@ local function Widget(props: Widget)
 	local size = Value(props.FloatingSize)
 	local resizing = false
 	local minimumSize = props.MinimumSize
+	local enabled = Statify(props.InitialEnabled or props.Enabled)
+	local onClose = props.OnClose or function()
+		enabled:set(false)
+	end
 	
 	local top = Vector2.new()
 	local bottom = Vector2.new()
@@ -84,7 +89,7 @@ local function Widget(props: Widget)
 		Parent = LocalPlayer:WaitForChild("PlayerGui"),
 		
 		IgnoreGuiInset = true,
-		Enabled = props.InitialEnabled,
+		Enabled = enabled,
 		ZIndexBehavior = Enum.ZIndexBehavior.Global,
 		
 		[Children] = {
@@ -121,7 +126,8 @@ local function Widget(props: Widget)
 							
 							Topbar {
 								Title = title,
-								Position = position
+								Position = position,
+								OnClose = onClose
 							},
 							
 							Background {

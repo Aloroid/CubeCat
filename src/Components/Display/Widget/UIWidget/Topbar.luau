@@ -9,6 +9,8 @@ local Components = script.Parent.Parent.Parent.Parent
 local Text = require(Components.Display.Text)
 local Background = require(Components.Decoration.Background)
 local Border = require(Components.Decoration.Border)
+local Button = require(Components.Interactable.Button)
+local Image = require(Components.Display.Image)
 
 local Fusion = require(Packages.Fusion)
 local Util = require(CubeCat.Utility)
@@ -26,13 +28,15 @@ export type Topbar = {
 	AnchorPoint: CanBeState<Vector2>?,
 	
 	Title: CanBeState<string>?,
+	OnClose: () -> ()?,
 
 	[any]: any
 }
 
 local COMPONENT_ONLY_PROPERTIES = {
 	"Position",
-	"Title"
+	"Title",
+	"OnClose"
 	
 }
 
@@ -51,18 +55,41 @@ local function Topbar(props: Topbar)
 		BackgroundColor = Enum.StudioStyleGuideColor.Button,
 		
 		FillDirection = Enum.FillDirection.Horizontal,
+		HorizontalAlignment = Enum.HorizontalAlignment.Left,
+		VerticalAlignment = Enum.VerticalAlignment.Center,
 		NoPadding = true,
+		ListPadding = 2,
 		
 		ZIndex = 1,
 		
 		[Children] = {
 			
 			Text {
+				AutomaticSize = Enum.AutomaticSize.None,
 				Size = UDim2.new(1, -24, 1, 0),
 				
 				Text = props.Title,
 				TextColor = Enum.StudioStyleGuideColor.SubText,
 				TextSize = 14
+			},
+			
+			Button {
+				
+				Size = UDim2.fromOffset(18, 18),
+				
+				NoPadding = true,
+				NoText = true,
+				FillDirection = Enum.FillDirection.Vertical,
+				VerticalAlignment = Enum.VerticalAlignment.Center,
+				HorizontalAlignment = Enum.HorizontalAlignment.Center,
+				
+				[Children] = Image {
+					Size = UDim2.fromOffset(12, 12),
+					ImageColor3 = Color3.new(1, 0.5, 0.5),
+					Image = "rbxasset://textures/loading/cancelButton.png"
+				},
+				
+				[OnEvent "Activated"] = props.OnClose
 			},
 			
 			Border {}
