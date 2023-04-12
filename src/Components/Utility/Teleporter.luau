@@ -134,7 +134,6 @@ local function TopLayer(props: TopLayer)
 		
 		[Cleanup] = function()
 			BaseClone:Destroy()
-			print("cleaned up")
 		end
 		
 	}
