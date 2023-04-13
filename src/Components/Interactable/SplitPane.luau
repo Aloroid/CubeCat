@@ -74,7 +74,7 @@ local function SplitPane(props: SplitPane)
 			},
 			
 			ForPairs(props[Children], function(index: number, child: Instance)
-				if child:IsA("GuiBase2d") == false then return end
+				if child:IsA("GuiBase2d") == false then return index, child end
 				
 				local position = Computed(function()
 					local scale = 0
