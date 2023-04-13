@@ -5,7 +5,7 @@ local plugin = script:FindFirstAncestorWhichIsA("Plugin")
 local function SetMouseIcon(icon: string)
 	
 	if plugin then
-		plugin:Activate()
+		plugin:Activate(true)
 		local mouse = plugin:GetMouse()
 		mouse.Icon = icon
 	elseif RunService:IsRunning() then
