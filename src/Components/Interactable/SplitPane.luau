@@ -80,7 +80,7 @@ local function SplitPane(props: SplitPane)
 					local scale = 0
 					
 					for i = 1, index-1 do
-						scale += unwrap(unwrap(props.Sizes)[i])
+						scale += unwrap(unwrap(props.Sizes)[i]) or 0
 					end
 					
 					return scale
