@@ -48,7 +48,6 @@ local function Border(props: Border)
 		
 	}
 	
-	
 	return Fusion.Hydrate(Border)(stripProps(props, COMPONENT_ONLY_PROPERTIES))
 	
 end

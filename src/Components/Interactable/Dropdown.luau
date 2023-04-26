@@ -36,6 +36,8 @@ export type Dropdown = {
 	Selected: CanBeState<string>?,
 	
 	MaxItems: CanBeState<number>?,
+	
+	OnSelect: CanBeState<(string) -> ()>?,
 
 	[any]: any
 }
@@ -43,7 +45,8 @@ export type Dropdown = {
 local COMPONENT_ONLY_PROPERTIES = {
 	"DropdownItems",
 	"Selected",
-	"MaxItems"
+	"MaxItems",
+	"OnSelect"
 	
 }
 
@@ -53,6 +56,7 @@ local function Dropdown(props: Dropdown)
 	local dropdownItems = props.DropdownItems
 	local selected = Statify(props.Selected or "")
 	local maxItems = props.MaxItems or 5
+	local onSelect = props.OnSelect
 	local itemSize = 24
 	
 	local Dropdown = Button {
@@ -163,7 +167,15 @@ local function Dropdown(props: Dropdown)
 												
 												[OnEvent "Activated"] = function()
 													expanded:set(false)
-													selected:set(value)
+													
+													local onSelect = unwrap(onSelect)
+													
+													onSelect = onSelect or function(value)
+														selected:set(value)
+													end
+													
+													onSelect(value)
+													
 												end
 												
 											}

@@ -49,6 +49,8 @@ export type Button = {
 	NoText: CanBeState<boolean>?,
 	NoPadding: CanBeState<boolean>?,
 	
+	OnActivated: CanBeState<() -> ()>?,
+	
 	[any]: any
 }
 

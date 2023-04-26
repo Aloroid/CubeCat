@@ -26,6 +26,8 @@ export type Checkbox = {
 	Checked: CanBeState<boolean>?,
 	Disabled: CanBeState<boolean>?,
 	
+	OnChecked: CanBeState<(value: number) -> ()>?,
+	
 	[any]: any
 }
 
@@ -40,6 +42,7 @@ local function Checkbox(props: Checkbox)
 	
 	local disabled = props.Disabled
 	local checked = Statify(props.Checked)
+	local onChecked = props.OnChecked
 	
 	local Checkbox = New "TextButton" {
 		
@@ -114,7 +117,16 @@ local function Checkbox(props: Checkbox)
 			
 		},
 		
-		[OnEvent "Activated"] = function() checked:set(not unwrap(checked)) end,
+		[OnEvent "Activated"] = function()
+			-- if onChecked does not exist, we instead run a function that
+			-- automatically sets it for them
+			local onChecked = unwrap(onChecked) or function(value)
+				checked:set(value)
+			end
+			
+			onChecked(not unwrap(checked))
+			
+		end,
 		
 	}
 	

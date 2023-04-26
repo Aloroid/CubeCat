@@ -36,15 +36,16 @@ local COMPONENT_ONLY_PROPERTIES = {
 local function Padding(props: Padding)
 	
 	local padding = props.Padding or 4
-	
-	local DefaultPadding = Computed(function() return UDim.new(0, unwrap(padding)) end)
+	local defaultPadding = Computed(function()
+		return UDim.new(0, unwrap(padding))
+	end)
 	
 	local Padding = New "UIPadding" {
 		
-		PaddingTop = DefaultPadding,
-		PaddingLeft = DefaultPadding,
-		PaddingRight = DefaultPadding,
-		PaddingBottom = DefaultPadding
+		PaddingTop = defaultPadding,
+		PaddingLeft = defaultPadding,
+		PaddingRight = defaultPadding,
+		PaddingBottom = defaultPadding
 		
 	}
 	

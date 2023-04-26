@@ -39,7 +39,7 @@ local COMPONENT_ONLY_PROPERTIES = {
 
 local function Shadow(props: Shadow)
 	
-	local Transparency = props.Transparency
+	local transparency = props.Transparency
 	
 	local Shadow = Image {
 		
@@ -50,7 +50,7 @@ local function Shadow(props: Shadow)
 		
 		Image = "rbxasset://textures/StudioSharedUI/dropShadow.png",
 		ImageColor3 = Theme(Enum.StudioStyleGuideColor.Midlight),
-		ImageTransparency = Transparency,
+		ImageTransparency = transparency,
 		
 		ScaleType = Enum.ScaleType.Slice,
 		SliceCenter = Rect.new(8, 8, 8, 8),

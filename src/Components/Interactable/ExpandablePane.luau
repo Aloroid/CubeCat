@@ -47,6 +47,7 @@ local COMPONENT_ONLY_PROPERTIES = {
 local function ExpandablePane(props: ExpandablePane)
 	
 	local expanded = Statify(props.Expanded or false)
+	
 	local hovering = Value(false)
 	local contentSize = Value(Vector2.zero)
 	

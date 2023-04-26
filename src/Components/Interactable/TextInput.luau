@@ -172,7 +172,7 @@ local function TextInput(props: TextInput)
 						Disabled = disabled,
 						Focused = focused,
 						
-						FocusLost = props.FocusLost
+						OnFocusLost = props.FocusLost
 					},
 					
 					props[Children]
