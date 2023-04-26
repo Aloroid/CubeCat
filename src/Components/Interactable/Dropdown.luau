@@ -83,7 +83,7 @@ local function Dropdown(props: Dropdown)
 					
 				end),
 				ImageColor3 = Computed(function()
-					return if unwrap(Theme()).Name == "Dark" then Color3.fromRGB(225, 225, 225) else Color3.fromRGB(29, 29, 29)
+					return if unwrap(Theme()) == "Dark" then Color3.fromRGB(225, 225, 225) else Color3.fromRGB(29, 29, 29)
 					
 				end),
 			},
