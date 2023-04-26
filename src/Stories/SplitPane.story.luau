@@ -8,6 +8,7 @@ local Fusion = require(Packages.Fusion)
 local Background = require(Components.Decoration.Background)
 local SplitPane = require(Components.Interactable.SplitPane)
 local Text = require(Components.Display.Text)
+local Border = require(Components.Decoration.Border)
 
 local Value = Fusion.Value
 local Children = Fusion.Children
@@ -27,10 +28,34 @@ return function(target)
 				
 				[Children] = {
 					
-					Text {Text = "first"},
-					Text {Text = "second"},
-					Text {Text = "third"},
-					Text {Text = "fourth"}
+					Background {
+						BackgroundColor = Enum.StudioStyleGuideColor.Button,
+						[Children] = {
+							Border {},
+							Text {Text = "first"}
+						}
+					},
+					Background {
+						BackgroundColor = Enum.StudioStyleGuideColor.Button,
+						[Children] = {
+							Border {},
+							Text {Text = "second"}
+						}
+					},
+					Background {
+						BackgroundColor = Enum.StudioStyleGuideColor.Button,
+						[Children] = {
+							Border {},
+							Text {Text = "third"}
+						}
+					},
+					Background {
+						BackgroundColor = Enum.StudioStyleGuideColor.Button,
+						[Children] = {
+							Border {},
+							Text {Text = "fourth"}
+						}
+					}
 					
 				}
 				
