@@ -35,6 +35,7 @@ local CubeCat = {
 		ExpandablePane = require(Components.Interactable.ExpandablePane),
 		ImageButton = require(Components.Interactable.ImageButton),
 		TextInput = require(Components.Interactable.TextInput),
+		Tabs = require(Components.Interactable.Tab),
 		SplitPane = require(Components.Interactable.SplitPane),
 
 		List = require(Components.Optimization.List),
