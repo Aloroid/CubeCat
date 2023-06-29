@@ -3,7 +3,6 @@ local UserInputService = game:GetService("UserInputService")
 local plugin = script:FindFirstAncestorWhichIsA("Plugin")
 
 local function SetMouseIcon(icon: string)
-	
 	if plugin then
 		plugin:Activate(true)
 		local mouse = plugin:GetMouse()
@@ -11,7 +10,6 @@ local function SetMouseIcon(icon: string)
 	elseif RunService:IsRunning() then
 		UserInputService.MouseIcon = icon
 	end
-	
 end
 
 return SetMouseIcon

@@ -15,10 +15,11 @@ local Colors = require(script.Colors)
 type CanBeState<T> = Fusion.CanBeState<T>?
 type Computed<T> = Fusion.Computed<T>
 
-local function Theme(GuideColor: CanBeState<Enum.StudioStyleGuideColor>, GuideModifier: CanBeState<Enum.StudioStyleGuideModifier>): Computed<Color3 | string>
-	
+local function Theme(
+	GuideColor: CanBeState<Enum.StudioStyleGuideColor>,
+	GuideModifier: CanBeState<Enum.StudioStyleGuideModifier>
+): Computed<Color3 | string>
 	return Colors(GuideColor, GuideModifier)
-	
 end
 
 return Theme

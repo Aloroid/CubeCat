@@ -28,60 +28,53 @@ export type Text = {
 	Position: CanBeState<UDim2>?,
 	Size: CanBeState<UDim2>?,
 	AnchorPoint: CanBeState<UDim2>?,
-	
 }
 
 local COMPONENT_ONLY_PROPERTIES = {
-	Children
+	Children,
 }
 
 local function Text(props: Text)
-	
 	local size = Value(Vector2.zero)
-	
+
 	local Text = New "Frame" {
-		
+
 		Name = "Blockquote",
-		
+
 		Size = UDim2.fromScale(1, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
-		
+
 		BackgroundTransparency = 1,
-		
+
 		[Children] = {
-			
+
 			New "UIListLayout" {
 				SortOrder = Enum.SortOrder.LayoutOrder,
 				FillDirection = Enum.FillDirection.Horizontal,
 			},
-			
+
 			New "Frame" {
-				
+
 				Size = Computed(function()
 					local currentSize = unwrap(size) or Vector2.zero
 					return UDim2.new(0, 8, 0, currentSize.Y)
 				end),
-				
+
 				BackgroundColor3 = Theme(Enum.StudioStyleGuideColor.Item, Enum.StudioStyleGuideModifier.Selected),
-				
 			},
-			
+
 			Background {
-				
+
 				Size = UDim2.new(1, -16, 0, 0),
 				AutomaticSize = Enum.AutomaticSize.Y,
-				
+
 				[Children] = props[Children],
-				[Out "AbsoluteSize"] = size
-				
-			}
-			
-		}
-		
+				[Out "AbsoluteSize"] = size,
+			},
+		},
 	}
-	
+
 	return Fusion.Hydrate(Text)(stripProps(props, COMPONENT_ONLY_PROPERTIES))
-	
 end
 
 return Text

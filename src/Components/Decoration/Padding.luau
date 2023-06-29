@@ -22,35 +22,31 @@ export type Padding = {
 	Position: CanBeState<UDim2>?,
 	Size: CanBeState<UDim2>?,
 	AnchorPoint: CanBeState<Vector2>?,
-	
+
 	Padding: CanBeState<number>?,
-	
-	[any]: any
+
+	[any]: any,
 }
 
 local COMPONENT_ONLY_PROPERTIES = {
-	"Padding"
-	
+	"Padding",
 }
 
 local function Padding(props: Padding)
-	
 	local padding = props.Padding or 4
 	local defaultPadding = Computed(function()
 		return UDim.new(0, unwrap(padding))
 	end)
-	
+
 	local Padding = New "UIPadding" {
-		
+
 		PaddingTop = defaultPadding,
 		PaddingLeft = defaultPadding,
 		PaddingRight = defaultPadding,
-		PaddingBottom = defaultPadding
-		
+		PaddingBottom = defaultPadding,
 	}
-	
+
 	return Fusion.Hydrate(Padding)(stripProps(props, COMPONENT_ONLY_PROPERTIES))
-	
 end
 
 return Padding

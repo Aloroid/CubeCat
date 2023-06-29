@@ -1,4 +1,3 @@
-
 local CubeCat = script.Parent.Parent
 local Packages = CubeCat.Parent
 local Components = CubeCat.Components
@@ -13,42 +12,34 @@ local Computed = Fusion.Computed
 local Children = Fusion.Children
 
 return function(target)
-	
 	local background = Background {
-		
+
 		Parent = target,
-		
+
 		[Children] = {
-			
+
 			List {
-				
+
 				StreamIn = function(index)
 					return Text {
 						Size = UDim2.new(1, 0, 0, 24),
 						Position = Computed(function()
 							return UDim2.fromOffset(0, index:get() * 24)
 						end),
-						
+
 						AutomaticSize = Enum.AutomaticSize.None,
-						
+
 						Text = Computed(function()
 							return tostring(index:get())
-						end)
+						end),
 					}
 				end,
-				ItemSize = 24
-				
-			}
-			
-		}
-		
+				ItemSize = 24,
+			},
+		},
 	}
-	
-	
+
 	return function()
-		
 		background:Destroy()
-		
 	end
-	
 end

@@ -6,7 +6,7 @@ local cloudIdInfoCache = {}
 local getEmptyData = require(script.Parent.getEmptyData)
 
 export type ProductData = {
-	
+
 	Name: string,
 	Description: string?,
 	PriceInRobux: number,
@@ -23,22 +23,20 @@ export type ProductData = {
 	IsNew: boolean,
 	Sales: number,
 	TargetId: number,
-	
+
 	Creator: {
 		CreatorTargetId: number,
 		CreatorType: string,
 		HasVerifiedBadge: boolean,
 		Id: number,
-		Name: string
-	}
-	
+		Name: string,
+	},
 }
 
 local function getPluginCalling(): ProductData
-	
 	local traceback = string.split(debug.traceback(), "\n")
 	local topLevel = traceback[#traceback - 1]
-	
+
 	local localPlugin = string.match(topLevel, "^[PluginDebugService%.]-user_(.-)%.")
 	if localPlugin then
 		return getEmptyData(localPlugin)
@@ -50,7 +48,8 @@ local function getPluginCalling(): ProductData
 		if info then
 			return info
 		else
-			local success, newInfo = pcall(MarketplaceService.GetProductInfo, MarketplaceService, tonumber(cloudId), Enum.InfoType.Asset)
+			local success, newInfo =
+				pcall(MarketplaceService.GetProductInfo, MarketplaceService, tonumber(cloudId), Enum.InfoType.Asset)
 			if success then
 				cloudIdInfoCache[cloudId] = newInfo
 				return newInfo
@@ -65,7 +64,6 @@ local function getPluginCalling(): ProductData
 	end
 
 	return getEmptyData("Command Bar", StudioService:GetUserId())
-	
 end
 
 return getPluginCalling

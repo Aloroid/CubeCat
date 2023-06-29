@@ -10,10 +10,9 @@ type PluginImpl = {
 export type Plugin = typeof(setmetatable(
 	{} :: {
 		ClassName: "Plugin",
-		
+
 		CollisionEnabled: boolean,
-		GridSize: number
-		
+		GridSize: number,
 	},
 	{} :: PluginImpl
 ))
@@ -24,23 +23,22 @@ Plugin.__index = Plugin
 function Plugin.new()
 	local self = setmetatable({
 		ClassName = "Plugin",
-		
+
 		CollisionEnabled = false,
 		GridSize = 1,
-		
+
 		_activated = false,
 		_exclusiveMouse = false,
 		_settings = {},
-		
+
 		Deactivation = Signal.new(),
-		Unloading = Signal.new()
-		
+		Unloading = Signal.new(),
 	}, Plugin)
-	
+
 	game:BindToClose(function()
 		self.Unloading:Fire()
 	end)
-	
+
 	return self
 end
 
@@ -50,7 +48,13 @@ function Plugin:Activate(exclusiveMouse: boolean)
 	self.Deactivation:Fire()
 end
 
-function Plugin:CreatePluginAction(actionId: string, text: string, statusTip: string, iconName: string, allowBinding: boolean)
+function Plugin:CreatePluginAction(
+	actionId: string,
+	text: string,
+	statusTip: string,
+	iconName: string,
+	allowBinding: boolean
+)
 	--TODO: Add PluginActions
 end
 
@@ -82,7 +86,7 @@ function Plugin:IsActivatedWithExclusiveMouse()
 	return self._activated and self._exclusiveMouse
 end
 
-function Plugin:Negate(objects: {BasePart})
+function Plugin:Negate(objects: { BasePart })
 	error("Unimplemented")
 end
 

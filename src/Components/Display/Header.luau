@@ -23,12 +23,11 @@ export type Text = {
 	Position: CanBeState<UDim2>?,
 	Size: CanBeState<UDim2>?,
 	AnchorPoint: CanBeState<UDim2>?,
-	
+
 	Text: CanBeState<string>,
 	TextColor: CanBeState<Enum.StudioStyleGuideColor>?,
 	TextModifier: CanBeState<Enum.StudioStyleGuideModifier>?,
-	HeaderSize: CanBeState<number>?
-	
+	HeaderSize: CanBeState<number>?,
 }
 
 local HEADER_SIZES = {
@@ -37,40 +36,37 @@ local HEADER_SIZES = {
 	19,
 	16,
 	13,
-	10
+	10,
 }
 
 local COMPONENT_ONLY_PROPERTIES = {
 	"Text",
 	"TextColor",
 	"TextModifier",
-	"HeaderSize"
+	"HeaderSize",
 }
 
 local function Text(props: Text)
-	
 	local TextColor3 = Spring(Theme(props.TextColor or Enum.StudioStyleGuideColor.MainText, props.TextModifier), 40, 1)
 	local headerSize = props.HeaderSize
-	
+
 	local Text = New "TextLabel" {
-		
+
 		Name = "Text",
-		
+
 		AutomaticSize = Enum.AutomaticSize.XY,
-		
+
 		BackgroundTransparency = 1,
-		
+
 		Text = props.Text,
 		TextColor3 = TextColor3,
 		TextSize = Computed(function()
 			return HEADER_SIZES[unwrap(headerSize)]
 		end),
-		FontFace = Font.fromEnum(Enum.Font.SourceSans)
-		
+		FontFace = Font.fromEnum(Enum.Font.SourceSans),
 	}
-	
+
 	return Fusion.Hydrate(Text)(stripProps(props, COMPONENT_ONLY_PROPERTIES))
-	
 end
 
 return Text

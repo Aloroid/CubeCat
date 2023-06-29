@@ -20,21 +20,20 @@ export type Row = {
 	Position: CanBeState<UDim2>?,
 	Size: CanBeState<UDim2>?,
 	AnchorPoint: CanBeState<Vector2>?,
-	
+
 	Index: CanBeState<number>?,
-	Columns: CanBeState<{[any]: any}>?,
-	Order: {any},
-	Sizes: {unknown},
-	
+	Columns: CanBeState<{ [any]: any }>?,
+	Order: { any },
+	Sizes: { unknown },
+
 	DisplayType: CanBeState<boolean>?,
 
-	[any]: any
+	[any]: any,
 }
 
 local function Row(props: Row)
-	
 	local displayType = props.DisplayType or false
-	
+
 	-- This function converts the given value into a string
 	local function tostringValue(value)
 		local vType = typeof(value)
@@ -48,75 +47,72 @@ local function Row(props: Row)
 			return if unwrap(displayType) then `{typeof(value)}: {tostring(value)}` else tostring(value)
 		end
 	end
-	
-	
+
 	local order = props.Order
 	local columns = props.Columns
 	local sizes = props.Sizes
-	
+
 	local Row = Background {
 		Name = "row",
 		Position = Computed(function()
-			return UDim2.fromOffset(0, (unwrap(props.Index)-1) * 24 - 1)
+			return UDim2.fromOffset(0, (unwrap(props.Index) - 1) * 24 - 1)
 		end),
 		Size = UDim2.new(1, 0, 0, 24),
-		
+
 		BackgroundColor = Enum.StudioStyleGuideColor.TableItem,
-		
+
 		NoList = true,
 		Padding = 0,
-		
+
 		[Children] = ForPairs(order, function(index, key)
 			local value = Computed(function()
 				return unwrap(columns)[key]
 			end)
-			
-			return index, Background {
-				Size = Computed(function()
-					local scale = unwrap(unwrap(sizes)[index])
-					return UDim2.new(scale, 0, 0, 24)
-				end),
-				Position = Computed(function()
-					local scale = 0
-					
-					for i = 1, index-1 do
-						scale += unwrap(unwrap(props.Sizes)[i])
-					end
-					
-					return UDim2.fromScale(scale, 0)
-				end),
-				
-				BackgroundColor = Enum.StudioStyleGuideColor.TableItem,
-				
-				NoList = true,
-				NoPadding = true,
-				
-				[Children] = {
-					
-					Text {
-				
-						Size = UDim2.fromScale(1, 1),
-						AutomaticSize = Enum.AutomaticSize.None,
-						
-						Text = Computed(function()
-							local realValue = unwrap(value)
-							return if key == "Index" or key == "Key" then tostring(realValue) else tostringValue(realValue)
-						end),
-						TextTruncate = Enum.TextTruncate.AtEnd
-						
+
+			return index,
+				Background {
+					Size = Computed(function()
+						local scale = unwrap(unwrap(sizes)[index])
+						return UDim2.new(scale, 0, 0, 24)
+					end),
+					Position = Computed(function()
+						local scale = 0
+
+						for i = 1, index - 1 do
+							scale += unwrap(unwrap(props.Sizes)[i])
+						end
+
+						return UDim2.fromScale(scale, 0)
+					end),
+
+					BackgroundColor = Enum.StudioStyleGuideColor.TableItem,
+
+					NoList = true,
+					NoPadding = true,
+
+					[Children] = {
+
+						Text {
+
+							Size = UDim2.fromScale(1, 1),
+							AutomaticSize = Enum.AutomaticSize.None,
+
+							Text = Computed(function()
+								local realValue = unwrap(value)
+								return if key == "Index" or key == "Key"
+									then tostring(realValue)
+									else tostringValue(realValue)
+							end),
+							TextTruncate = Enum.TextTruncate.AtEnd,
+						},
+
+						Border {},
 					},
-					
-					Border {}
-					
 				}
-				
-			}
-		end, Fusion.cleanup)
+		end, Fusion.cleanup),
 	}
-	
-	
+
 	return Row
-	
 end
 
 return Row

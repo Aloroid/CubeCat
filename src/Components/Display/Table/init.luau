@@ -25,15 +25,15 @@ export type Table = {
 	Position: CanBeState<UDim2>?,
 	Size: CanBeState<UDim2>?,
 	AnchorPoint: CanBeState<Vector2>?,
-	
-	Table: CanBeState<{[any]: any}>?,
-	Rows: CanBeState<{{[any]: any}}>?,
-	Order: {string}?,
-	InitialSizes: {number}?,
-	
+
+	Table: CanBeState<{ [any]: any }>?,
+	Rows: CanBeState<{ { [any]: any } }>?,
+	Order: { string }?,
+	InitialSizes: { number }?,
+
 	DisplayTotal: CanBeState<number>?,
-	
-	[any]: any
+
+	[any]: any,
 }
 
 local COMPONENT_ONLY_PROPERTIES = {
@@ -41,38 +41,36 @@ local COMPONENT_ONLY_PROPERTIES = {
 	"Rows",
 	"Order",
 	"DisplayTotal",
-	"InitialSizes"
-	
+	"InitialSizes",
 }
 
 local function Table(props: Table)
-	
 	local initialSize = props.InitialSizes or {}
 	local sizes = {}
 	local minSizes = {}
 	local keys = {}
 	local rows = props.Rows
-	
+
 	local displayTotal = props.DisplayTotal or 30
-	
+
 	-- Converts or adjusts the above values so that it can properly fit.
 	if props.Table then
-		sizes = {Value(0.2), Value(0.8)}
-		minSizes = {Value(0.1), Value(0.1)}
-		keys = {"Key", "Value"}
-		
+		sizes = { Value(0.2), Value(0.8) }
+		minSizes = { Value(0.1), Value(0.1) }
+		keys = { "Key", "Value" }
+
 		rows = Computed(function()
 			local data = unwrap(props.Table)
 			local newRows = {}
 			for key, value in data do
-				table.insert(newRows, {Key = key, Value = value})
+				table.insert(newRows, { Key = key, Value = value })
 			end
 			return newRows
 		end)
 	elseif props.Rows then
 		local totalFields = 0
 		local sizeAvailable = 1
-		
+
 		if props.Order then
 			totalFields = #props.Order
 			for i, key in props.Order do
@@ -86,74 +84,70 @@ local function Table(props: Table)
 				sizeAvailable -= initialSize[totalFields] or 0
 			end
 		end
-		
+
 		for i = 1, totalFields do
 			table.insert(sizes, Value(sizeAvailable / (totalFields - #initialSize)))
 			table.insert(minSizes, 0.075)
 		end
-		
 	end
-	
+
 	if props.InitialSizes then
 		local totalSize = 0
 		for i, size in props.InitialSizes do
 			totalSize += size
 			sizes[i]:set(size)
 		end
-		
 	end
-	
+
 	local Table = Background {
-		
+
 		AutomaticSize = Enum.AutomaticSize.Y,
-		
+
 		Size = UDim2.new(1, 0, 0, 24),
-		
+
 		NoPadding = true,
 		ListPadding = 1,
-		
+
 		[Children] = {
-			
+
 			SplitPane {
-				
+
 				Size = UDim2.new(1, 0, 0, 24),
-				
+
 				Sizes = sizes,
 				MinSizes = minSizes,
-				
+
 				[Children] = ForValues(keys, function(key)
 					return Background {
 						BackgroundColor = Enum.StudioStyleGuideColor.Button,
-						
+
 						VerticalAlignment = Enum.VerticalAlignment.Center,
 						HorizontalAlignment = Enum.HorizontalAlignment.Center,
-						
+
 						[Children] = {
-							
+
 							Text {
 								AutomaticSize = Enum.AutomaticSize.None,
 								Size = UDim2.fromScale(1, 1),
-								
+
 								Text = key,
-								TextTruncate = Enum.TextTruncate.AtEnd
+								TextTruncate = Enum.TextTruncate.AtEnd,
 							},
-							
-							Border {}
-							
-						}
+
+							Border {},
+						},
 					}
-				end, Fusion.cleanup)
-				
+				end, Fusion.cleanup),
 			},
-			
+
 			List {
-				
+
 				Size = Computed(function()
 					return UDim2.new(1, 0, 0, 24 * unwrap(displayTotal))
 				end),
-				
+
 				BackgroundColor = Enum.StudioStyleGuideColor.ViewPortBackground,
-				
+
 				StreamIn = function(index)
 					if props.Table then
 						return Row {
@@ -162,7 +156,7 @@ local function Table(props: Table)
 							Index = index,
 							Columns = Computed(function()
 								return unwrap(rows)[unwrap(index)]
-							end)
+							end),
 						}
 					else
 						return Row {
@@ -171,27 +165,23 @@ local function Table(props: Table)
 							Index = index,
 							Columns = Computed(function()
 								return unwrap(rows)[unwrap(index)]
-							end)
+							end),
 						}
 					end
 				end,
 				ItemSize = 24,
-				
+
 				MinItems = 1,
 				MaxItems = Computed(function()
 					return #unwrap(rows)
 				end),
-				
-				[Children] = Border {}
-				
-			}
-			
-		}
-		
+
+				[Children] = Border {},
+			},
+		},
 	}
-	
+
 	return Fusion.Hydrate(Table)(stripProps(props, COMPONENT_ONLY_PROPERTIES))
-	
 end
 
 return Table

@@ -17,107 +17,97 @@ local stripProps = Util.stripProps
 
 type CanBeState<T> = Fusion.CanBeState<T>
 export type Permission = {
-	
+
 	Name: string,
 	Description: string,
-	
+
 	Value: CanBeState<boolean>,
 
-	[any]: any
+	[any]: any,
 }
 
 local COMPONENT_ONLY_PROPERTIES = {
 
 	"Description",
-	"Value"
-	
+	"Value",
 }
 
 local function Permission(props: Permission)
-	
 	local Permission = Background {
-		
+
 		Size = UDim2.fromScale(1, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
-		
+
 		NoPadding = true,
 		ListPadding = 12,
-		
+
 		[Children] = {
-			
+
 			Line {},
-			
+
 			Background {
-				
+
 				Size = UDim2.fromScale(1, 0),
 				AutomaticSize = Enum.AutomaticSize.Y,
-				
+
 				NoPadding = true,
-				
+
 				[Children] = {
-					
+
 					Padding {
 						Padding = 24,
 						PaddingBottom = UDim.new(0, 0),
-						PaddingTop = UDim.new(0, 0)
+						PaddingTop = UDim.new(0, 0),
 					},
-					
+
 					Checkbox {
-					
+
 						Size = UDim2.fromScale(1, 0),
-						
+
 						Checked = props.Value,
-						
+
 						[Children] = Background {
-							
+
 							Size = UDim2.fromScale(1, 0),
 							AutomaticSize = Enum.AutomaticSize.Y,
-							
+
 							Padding = 0,
-							
+
 							[Children] = {
-								
+
 								Text {
 									Name = "Name",
-									
+
 									Size = UDim2.new(1, -24, 0, 0),
 									AutomaticSize = Enum.AutomaticSize.Y,
-									
+
 									Text = props.Name,
 									TextXAlignment = Enum.TextXAlignment.Left,
 									Font = Enum.Font.SourceSansBold,
 									TextSize = 24,
 								},
-								
+
 								Text {
 									Name = "Description",
-									
+
 									Size = UDim2.new(1, -24, 0, 0),
 									AutomaticSize = Enum.AutomaticSize.Y,
-									
+
 									Text = props.Description,
 									TextXAlignment = Enum.TextXAlignment.Left,
 									TextWrapped = true,
 									Font = Enum.Font.SourceSans,
 									TextSize = 18,
-								}
-								
-							}
-						}
-					
-				}
-					
-				}
-				
-			}
-			
-		}
-		
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 	}
-	
-	
+
 	return Fusion.Hydrate(Permission)(stripProps(props, COMPONENT_ONLY_PROPERTIES))
-	
 end
 
 return Permission

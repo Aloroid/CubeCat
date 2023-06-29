@@ -1,4 +1,3 @@
-
 local CubeCat = script.Parent.Parent
 local Packages = CubeCat.Parent
 local Components = CubeCat.Components
@@ -14,62 +13,53 @@ local Value = Fusion.Value
 local Children = Fusion.Children
 
 return function(target)
-	
 	local background = Background {
-		
+
 		Parent = target,
-		
+
 		[Children] = {
-			
+
 			SplitPane {
-				
-				Sizes = {Value(0.25), Value(0.25), Value(0.25), Value(0.25)},
-				MinSizes = {Value(0.1), Value(0.1), Value(0.1), Value(0.1)},
-				
+
+				Sizes = { Value(0.25), Value(0.25), Value(0.25), Value(0.25) },
+				MinSizes = { Value(0.1), Value(0.1), Value(0.1), Value(0.1) },
+
 				[Children] = {
-					
+
 					Background {
 						BackgroundColor = Enum.StudioStyleGuideColor.Button,
 						[Children] = {
 							Border {},
-							Text {Text = "first"}
-						}
+							Text { Text = "first" },
+						},
 					},
 					Background {
 						BackgroundColor = Enum.StudioStyleGuideColor.Button,
 						[Children] = {
 							Border {},
-							Text {Text = "second"}
-						}
+							Text { Text = "second" },
+						},
 					},
 					Background {
 						BackgroundColor = Enum.StudioStyleGuideColor.Button,
 						[Children] = {
 							Border {},
-							Text {Text = "third"}
-						}
+							Text { Text = "third" },
+						},
 					},
 					Background {
 						BackgroundColor = Enum.StudioStyleGuideColor.Button,
 						[Children] = {
 							Border {},
-							Text {Text = "fourth"}
-						}
-					}
-					
-				}
-				
-			}
-			
-		}
-		
+							Text { Text = "fourth" },
+						},
+					},
+				},
+			},
+		},
 	}
-	
-	
+
 	return function()
-		
 		background:Destroy()
-		
 	end
-	
 end

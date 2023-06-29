@@ -1,7 +1,6 @@
 local function getEmptyData(name: string?, userId: number?)
-	
 	return {
-					
+
 		Name = name or "Unknown",
 		Description = nil,
 		PriceInRobux = 0,
@@ -10,15 +9,15 @@ local function getEmptyData(name: string?, userId: number?)
 		ContentRatingTypeId = 0,
 		MinimumMembershipLevel = 0,
 		IsPublicDomain = true,
-		
+
 		Creator = {
 			CreatorTargetId = userId or 0,
 			CreatorType = "User",
 			HasVerifiedBadge = false,
 			Id = userId or 0,
-			Name = ""
+			Name = "",
 		},
-		
+
 		AssetId = 0,
 		AssetTypeId = 38,
 		IsForSale = false,
@@ -26,10 +25,8 @@ local function getEmptyData(name: string?, userId: number?)
 		IsLimitedUnique = false,
 		IsNew = false,
 		Sales = 0,
-		TargetId = 0
-		
+		TargetId = 0,
 	}
-	
 end
 
 return getEmptyData

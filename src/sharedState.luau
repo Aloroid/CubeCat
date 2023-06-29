@@ -1,7 +1,6 @@
 return {
-	
+
 	Services = {},
 	PublicExportInstances = {},
-	Permissions = {}
-	
+	Permissions = {},
 }

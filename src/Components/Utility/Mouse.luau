@@ -27,68 +27,65 @@ export type Mouse = {
 	MousePosition: Value<Vector2>,
 	MouseButton1Down: Value<boolean>,
 
-	[any]: any
+	[any]: any,
 }
 
 local COMPONENT_ONLY_PROPERTIES = {
 	"MouseButton1Down",
-	"MousePosition"
-	
+	"MousePosition",
 }
 
 local function Mouse(props: Mouse)
-	
 	local object = Value()
 	local isInWidgetDown = Value(false)
-	
+
 	local Mouse = Teleporter {
 		IgnoreOffset = true,
 		[Children] = New "Frame" {
-		
+
 			AnchorPoint = Vector2.new(0.5, 0.5),
 			Position = Computed(function()
 				return UDim2.fromOffset(unwrap(props.MousePosition).X, unwrap(props.MousePosition).Y)
 			end),
 			Size = UDim2.fromOffset(200, 200),
-			
+
 			Active = false,
-			
+
 			BackgroundTransparency = 1,
-			
+
 			[Ref] = object,
-			
+
 			[OnEvent "InputBegan"] = function(input: InputObject)
 				if input.UserInputType == Enum.UserInputType.MouseButton1 then
 					isInWidgetDown:set(true)
 				end
 			end,
-			
+
 			[OnEvent "InputEnded"] = function(input: InputObject)
 				if input.UserInputType == Enum.UserInputType.MouseButton1 then
 					isInWidgetDown:set(false)
 				end
 			end,
-			
+
 			[Cleanup] = RunService.RenderStepped:Connect(function()
 				local object = unwrap(object) :: Instance
 				local dockWidget = object:FindFirstAncestorWhichIsA("DockWidgetPluginGui")
 				local position = UserInputService:GetMouseLocation()
-				
-				props.MouseButton1Down:set(unwrap(isInWidgetDown) or UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1))
-				
+
+				props.MouseButton1Down:set(
+					unwrap(isInWidgetDown) or UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)
+				)
+
 				if dockWidget then
 					position = dockWidget:GetRelativeMousePosition()
 				end
-					
+
 				props.MousePosition:set(position)
-			end)
-			
-		}
-		
+			end),
+		},
 	}
-	
+
 	return Fusion.Hydrate(Mouse)(stripProps(props, COMPONENT_ONLY_PROPERTIES))
-	
 end
 
 return Mouse

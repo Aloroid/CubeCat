@@ -943,5 +943,4 @@ return {
 		[Enum.StudioStyleGuideModifier.Disabled] = Color3.fromRGB(170, 170, 170),
 		[Enum.StudioStyleGuideModifier.Hover] = Color3.fromRGB(170, 170, 170),
 	},
-
 }

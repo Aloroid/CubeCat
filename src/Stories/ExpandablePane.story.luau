@@ -1,4 +1,3 @@
-
 local CubeCat = script.Parent.Parent
 local Packages = CubeCat.Parent
 local Components = CubeCat.Components
@@ -13,41 +12,31 @@ local ExpandablePane = require(Components.Interactable.ExpandablePane)
 local Children = Fusion.Children
 
 return function(target)
-	
 	local background = Background {
 		Parent = target,
-		
+
 		[Children] = {
-			
+
 			ExpandablePane {
 				PaneText = "Hello!",
-				
+
 				[Children] = {
-					
+
 					Button {
-						Text = "Sadge"
-						
+						Text = "Sadge",
 					},
-					
+
 					Text {
-						Text = "Hello there!"
-					}
-					
-				}
+						Text = "Hello there!",
+					},
+				},
 			},
-			
-			ExpandablePane {
-				
-			}
-			
-		}
-		
+
+			ExpandablePane {},
+		},
 	}
-	
+
 	return function()
-		
 		background:Destroy()
-		
 	end
-	
 end

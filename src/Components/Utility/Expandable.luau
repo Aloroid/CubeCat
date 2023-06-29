@@ -27,61 +27,55 @@ export type Expandable = {
 	Position: CanBeState<UDim2>?,
 	Size: CanBeState<UDim2>?,
 	AnchorPoint: CanBeState<Vector2>?,
-	
+
 	Expanded: CanBeState<boolean>?,
 
-	[any]: any
+	[any]: any,
 }
 
 local COMPONENT_ONLY_PROPERTIES = {
 	"Expanded",
-	Children
-	
+	Children,
 }
 
 local function Expandable(props: Expandable)
-	
 	local expanded = props.Expanded
-	
+
 	local contentSize = Value(Vector2.zero)
 	local snappedSize = Computed(function()
 		if unwrap(expanded) then
 			local contentSize = unwrap(contentSize) or Vector2.zero
-			
+
 			return UDim2.new(1, 0, 0, contentSize.Y)
 		else
 			return UDim2.new(1, 0, 0, 0)
 		end
 	end)
 	local currentSize = Spring(snappedSize, 40, 1)
-	
+
 	local Expandable = New "Frame" {
 		Name = "ExpandableContainer",
-		
+
 		Size = currentSize,
-		
+
 		BackgroundTransparency = 1,
-		
+
 		ClipsDescendants = true,
-		
+
 		[Children] = New "Frame" {
 			Name = "Container",
-			
+
 			Size = UDim2.new(1, 0),
 			AutomaticSize = Enum.AutomaticSize.Y,
-			
+
 			BackgroundTransparency = 1,
-			
+
 			[Out "AbsoluteSize"] = contentSize,
-			[Children] = props[Children]
-			
-		}
-		
+			[Children] = props[Children],
+		},
 	}
-	
-	
+
 	return Fusion.Hydrate(Expandable)(stripProps(props, COMPONENT_ONLY_PROPERTIES))
-	
 end
 
 return Expandable

@@ -17,6 +17,7 @@ local Components = script.Parent.Parent
 local CubeCat = script.Parent.Parent.Parent
 
 local Fusion = require(Packages.Fusion)
+local FusionPlasma = require(Packages.FusionPlasma)
 local Util = require(CubeCat.Utility)
 
 local Background = require(Components.Decoration.Background)
@@ -41,20 +42,20 @@ export type TextInput = {
 	Position: CanBeState<UDim2>?,
 	Size: CanBeState<UDim2>?,
 	AnchorPoint: CanBeState<Vector2>?,
-	
+
 	Text: CanBeState<string>?,
 	MultiLine: boolean?,
 	PlaceholderText: CanBeState<string>?,
 	ErrorLocation: CanBeState<"Bottom" | "Right" | "None">?,
-	
+
 	Disabled: CanBeState<boolean>?,
 	Focused: CanBeState<boolean>?,
-	
+
 	Validator: CanBeState<(text: string) -> (boolean, string)>?,
 	Filter: CanBeState<(text: string) -> string>?,
 	FocusLost: CanBeState<(text: string) -> string>?,
-	
-	[any]: any
+
+	[any]: any,
 }
 
 local COMPONENT_ONLY_PROPERTIES = {
@@ -67,59 +68,72 @@ local COMPONENT_ONLY_PROPERTIES = {
 	"Disabled",
 	"Focused",
 	"FocusLost",
-	Children
-	
+	Children,
 }
 
 local function TextInput(props: TextInput)
-	
 	local text = Statify(props.Text or "")
 	local fail = Value(false)
 	local message = Value("")
 	local focused = Statify(props.Focused or false)
 	local hovering = Value(false)
-	local filter = props.Filter or function() return end
-	local validator = props.Validator or function() return true end
+	local filter = props.Filter
+	local validator = props.Validator
 	local errorLocation = props.ErrorLocation
 	local disabled = props.Disabled
-	
+
 	local BaseTextInput = if props.MultiLine then BaseMultiLine else BaseTextInput
-	
+
 	local oldText = unwrap(text)
+	local onTextChanged
 	local skip = false
 	local function validate()
 		local currentText = unwrap(text)
-		if currentText == nil or skip then return end
-		
-		local filter = unwrap(filter)
-		local validator = unwrap(validator)
-		
+		if currentText == nil or skip then
+			return
+		end
+
+		local filter = unwrap(filter) or function(s)
+			return s
+		end
+		local validator = unwrap(validator) or function()
+			return true
+		end
+
 		local filteredText = filter(currentText, oldText)
-		
+
 		if type(filteredText) == "string" then
 			currentText = filteredText
 		end
-		
+
 		local ok, result = validator(currentText)
-		
+
 		oldText = currentText
 		fail:set(not ok)
 		message:set(if result == nil then "" else result)
 		skip = true
 		text:set(currentText)
 		skip = false
+
+		if onTextChanged then
+			onTextChanged(currentText)
+			onTextChanged = nil
+		end
 	end
-	
+
+	local enterPressed = false
+	local focusLost = false
+
 	local textUpdated = Observer(text):onChange(validate)
-	
+
 	local TextInput = Background {
 		Name = "TextInput",
-		
+
 		Size = UDim2.fromOffset(300, 24),
 		AutomaticSize = Enum.AutomaticSize.Y,
-		
+
 		BackgroundTransparency = 1,
-		
+
 		VerticalAlignment = Computed(function()
 			local location = unwrap(errorLocation)
 			if location == "Bottom" then
@@ -127,7 +141,6 @@ local function TextInput(props: TextInput)
 			else
 				return Enum.VerticalAlignment.Center
 			end
-				
 		end),
 		FillDirection = Computed(function()
 			local location = unwrap(errorLocation)
@@ -138,18 +151,18 @@ local function TextInput(props: TextInput)
 			end
 		end),
 		NoPadding = true,
-		
+
 		[Children] = {
-			
+
 			Button {
-			
+
 				Size = UDim2.new(1, 0, 0, 24),
 				AutomaticSize = if props.MultiLine then Enum.AutomaticSize.Y else Enum.AutomaticSize.None,
-				
+
 				Hovering = hovering,
 				Selected = focused,
 				Disabled = disabled,
-				
+
 				BackgroundColor = Enum.StudioStyleGuideColor.InputFieldBackground,
 				BorderColor = Computed(function()
 					if unwrap(fail) then
@@ -158,31 +171,32 @@ local function TextInput(props: TextInput)
 						return Enum.StudioStyleGuideColor.InputFieldBorder
 					end
 				end),
-				
+
 				NoText = true,
-				
+
 				[Children] = {
-					
+
 					BaseTextInput {
 						Size = UDim2.new(1, 0, 0, 24),
-						
+
 						Text = text,
 						PlaceholderText = props.PlaceholderText,
-						
+
 						Disabled = disabled,
 						Focused = focused,
-						
-						OnFocusLost = props.FocusLost
+
+						OnFocusLost = props.FocusLost or function(v)
+							enterPressed = v
+							focusLost = true
+						end,
 					},
-					
-					props[Children]
-					
-				}
-				
+
+					props[Children],
+				},
 			},
-			
+
 			Text {
-				
+
 				Text = message,
 				TextColor = Computed(function()
 					if unwrap(fail) then
@@ -191,11 +205,11 @@ local function TextInput(props: TextInput)
 						return Enum.StudioStyleGuideColor.DimmedText
 					end
 				end),
-				
+
 				TextTransparency = Spring(
 					Computed(function()
 						local message = unwrap(message)
-						
+
 						if message ~= "" then
 							return 0
 						else
@@ -205,21 +219,46 @@ local function TextInput(props: TextInput)
 					40,
 					1
 				),
-				
-				Visible = Computed(function() return unwrap(message) ~= "" end)
-				
-			}
-			
+
+				Visible = Computed(function()
+					return unwrap(message) ~= ""
+				end),
+			},
 		},
-		[Cleanup] = textUpdated
-		
-		
+		[Cleanup] = textUpdated,
 	}
-	
+
+	FusionPlasma.expose(function()
+		return {
+			filter = function(self, callback)
+				filter:set(callback)
+				return self
+			end,
+			validate = function(self, callback)
+				if unwrap(validator) == callback then
+					return self
+				end
+				validator:set(callback)
+				validate()
+				return self
+			end,
+			focusLost = function(self)
+				local focus = focusLost
+				local pressed = enterPressed
+				focusLost = false
+				enterPressed = false
+				return focus, pressed
+			end,
+			text = function(self, callback)
+				onTextChanged = callback
+				return self
+			end,
+		}
+	end)
+
 	validate()
-	
+
 	return Fusion.Hydrate(TextInput)(stripProps(props, COMPONENT_ONLY_PROPERTIES))
-	
 end
 
 return TextInput
