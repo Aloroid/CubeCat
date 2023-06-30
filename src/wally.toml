@@ -3,11 +3,13 @@ name = "aloroid/cubecat"
 description = "A plugin framework designed to allow for interconnecting with other plugins"
 exclude = ["Packages"]
 license = "MIT"
-version = "0.3.5"
+version = "0.4.0"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
 Fusion = "elttob/fusion@0.2.0"
+FusionPlasma = "aloroid/fusionplasma@0.1.5"
+Plasma = "aloroid/plasma@0.4.4"
 Signal = "sleitnick/signal@1.4.2"
 Markdown = "aloroid/markdown@0.1.2"
