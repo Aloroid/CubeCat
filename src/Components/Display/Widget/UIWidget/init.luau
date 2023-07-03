@@ -62,8 +62,12 @@ local COMPONENT_ONLY_PROPERTIES = {
 
 local RESIZE_RANGE = 5
 local canAccessCoregui, coreGui = pcall(function()
+	local _ = game:GetService("CoreGui").Name
 	return game:GetService("CoreGui")
 end)
+if canAccessCoregui == false then
+	coreGui = nil
+end
 
 local function Widget(props: Widget)
 	local LocalPlayer = Players.LocalPlayer
